@@ -26,7 +26,6 @@ import { buildTree } from "@/features/page/tree/utils";
 import { IPage } from "@/features/page/types/page.types.ts";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { ConfluenceIcon } from "@/components/icons/confluence-icon.tsx";
 import { getFileImportSizeLimit, isCloud } from "@/lib/config.ts";
 import { formatBytes } from "@/lib";
 import { workspaceAtom } from "@/features/user/atoms/current-user-atom.ts";
@@ -84,8 +83,6 @@ function ImportFormatSelection({ spaceId, onClose }: ImportFormatSelection) {
   const [fileTaskId, setFileTaskId] = useState<string | null>(null);
   const emit = useQueryEmit();
 
-  const canUseConfluence = isCloud() || workspace?.hasLicenseKey;
-
   const handleZipUpload = async (selectedFile: File, source: string) => {
     if (!selectedFile) {
       return;
@@ -108,7 +105,7 @@ function ImportFormatSelection({ spaceId, onClose }: ImportFormatSelection) {
         id: "import",
         title: t("Importing pages"),
         message: t(
-          "Page import is in progress. You can check back later if this takes longer.",
+          "Page import is in progress. You can check back later if this takes longer."
         ),
         loading: true,
         withCloseButton: true,
@@ -174,7 +171,7 @@ function ImportFormatSelection({ spaceId, onClose }: ImportFormatSelection) {
               "Something went wrong while importing pages: {{reason}}.",
               {
                 reason: fileTask.errorMessage,
-              },
+              }
             ),
             icon: <IconX size={18} />,
             loading: false,
@@ -194,7 +191,7 @@ function ImportFormatSelection({ spaceId, onClose }: ImportFormatSelection) {
             "Something went wrong while importing pages: {{reason}}.",
             {
               reason: err.response?.data.message,
-            },
+            }
           ),
           icon: <IconX size={18} />,
           loading: false,
@@ -313,27 +310,6 @@ function ImportFormatSelection({ spaceId, onClose }: ImportFormatSelection) {
             </Button>
           )}
         </FileButton>
-        <FileButton
-          onChange={(file) => handleZipUpload(file, "confluence")}
-          accept="application/zip"
-        >
-          {(props) => (
-            <Tooltip
-              label={t("Available in enterprise edition")}
-              disabled={canUseConfluence}
-            >
-              <Button
-                disabled={!canUseConfluence}
-                justify="start"
-                variant="default"
-                leftSection={<ConfluenceIcon size={18} />}
-                {...props}
-              >
-                Confluence
-              </Button>
-            </Tooltip>
-          )}
-        </FileButton>
       </SimpleGrid>
 
       <Group justify="center" gap="xl" mih={150}>
@@ -346,7 +322,7 @@ function ImportFormatSelection({ spaceId, onClose }: ImportFormatSelection) {
               `Upload zip file containing Markdown and HTML files. Max: {{sizeLimit}}`,
               {
                 sizeLimit: formatBytes(getFileImportSizeLimit()),
-              },
+              }
             )}
           </Text>
           <FileButton

@@ -1,20 +1,18 @@
 import { Spotlight } from "@mantine/spotlight";
 import { IconSearch } from "@tabler/icons-react";
-import React, { useState, useMemo } from "react";
+import { useState, useMemo } from "react";
 import { useDebouncedValue } from "@mantine/hooks";
 import { useTranslation } from "react-i18next";
 import { searchSpotlightStore } from "../constants.ts";
 import { SearchSpotlightFilters } from "./search-spotlight-filters.tsx";
 import { useUnifiedSearch } from "../hooks/use-unified-search.ts";
 import { SearchResultItem } from "./search-result-item.tsx";
-import { useLicense } from "@/ee/hooks/use-license.tsx";
 
 interface SearchSpotlightProps {
   spaceId?: string;
 }
 export function SearchSpotlight({ spaceId }: SearchSpotlightProps) {
   const { t } = useTranslation();
-  const { hasLicenseKey } = useLicense();
   const [query, setQuery] = useState("");
   const [debouncedSearchQuery] = useDebouncedValue(query, 300);
   const [filters, setFilters] = useState<{
@@ -42,8 +40,7 @@ export function SearchSpotlight({ spaceId }: SearchSpotlightProps) {
   const { data: searchResults, isLoading } = useUnifiedSearch(searchParams);
 
   // Determine result type for rendering
-  const isAttachmentSearch =
-    filters.contentType === "attachment" && hasLicenseKey;
+  const isAttachmentSearch = false;
 
   const resultItems = (searchResults || []).map((result) => (
     <SearchResultItem

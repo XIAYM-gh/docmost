@@ -17,10 +17,8 @@ import { useRedirectIfAuthenticated } from "@/features/auth/hooks/use-redirect-i
 import { Link } from "react-router-dom";
 import APP_ROUTE from "@/lib/app-route.ts";
 import { useTranslation } from "react-i18next";
-import SsoLogin from "@/ee/components/sso-login.tsx";
 import { useWorkspacePublicDataQuery } from "@/features/workspace/queries/workspace-query.ts";
 import { Error404 } from "@/components/ui/error-404.tsx";
-import React from "react";
 
 const formSchema = z.object({
   email: z
@@ -54,7 +52,7 @@ export function LoginForm() {
   }
 
   if (isDataLoading) {
-   return null;
+    return null;
   }
 
   if (isError && error?.["response"]?.status === 404) {
@@ -67,8 +65,6 @@ export function LoginForm() {
         <Title order={2} ta="center" fw={500} mb="md">
           {t("Login")}
         </Title>
-
-        <SsoLogin />
 
         {!data?.enforceSso && (
           <>

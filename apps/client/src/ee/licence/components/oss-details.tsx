@@ -10,9 +10,9 @@ export default function OssDetails() {
         layout="fixed"
         withTableBorder
       >
-        <Table.Caption>
+        {/* <Table.Caption>
           To unlock enterprise features like SSO, MFA, Resolve comments, contact sales@docmost.com.
-        </Table.Caption>
+        </Table.Caption> */}
         <Table.Tbody>
           <Table.Tr>
             <Table.Th w={160}>Edition</Table.Th>

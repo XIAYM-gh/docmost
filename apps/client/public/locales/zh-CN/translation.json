@@ -527,5 +527,8 @@
   "Delete SSO provider": "删除SSO提供商",
   "Are you sure you want to delete this SSO provider?": "您确定要删除此SSO提供商吗？",
   "Action": "操作",
-  "{{ssoProviderType}} configuration": "{{ssoProviderType}} 配置"
+  "{{ssoProviderType}} configuration": "{{ssoProviderType}} 配置",
+  "Security": "安全",
+  "System": "系统",
+  "License & Edition": "许可证及版本"
 }

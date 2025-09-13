@@ -8,7 +8,7 @@ export async function up(db: Kysely<any>): Promise<void> {
     )
     // type (import, export)
     .addColumn('type', 'varchar', (col) => col)
-    // source (generic, notion, confluence)
+    // source (generic, notion)
     .addColumn('source', 'varchar', (col) => col)
     // status (pending|processing|success|failed),
     .addColumn('status', 'varchar', (col) => col)

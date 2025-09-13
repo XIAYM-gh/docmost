@@ -53,7 +53,6 @@ export class ImportAttachmentService {
     fileTask: FileTask;
     attachmentCandidates: Map<string, string>;
     pageAttachments?: AttachmentInfo[];
-    isConfluenceImport?: boolean;
   }): Promise<string> {
     const {
       html,
@@ -63,7 +62,6 @@ export class ImportAttachmentService {
       fileTask,
       attachmentCandidates,
       pageAttachments = [],
-      isConfluenceImport,
     } = opts;
 
     const attachmentTasks: (() => Promise<void>)[] = [];
@@ -92,10 +90,7 @@ export class ImportAttachmentService {
     >();
 
     // Analyze attachments to identify Draw.io pairs
-    const { drawioPairs, skipFiles } = this.analyzeAttachments(
-      pageAttachments,
-      isConfluenceImport,
-    );
+    const { drawioPairs, skipFiles } = this.analyzeAttachments(pageAttachments);
 
     // Map to store processed Draw.io SVGs
     const drawioSvgMap = new Map<
@@ -556,19 +551,12 @@ export class ImportAttachmentService {
     return $.root().html() || '';
   }
 
-  private analyzeAttachments(
-    attachments: AttachmentInfo[],
-    isConfluenceImport?: boolean,
-  ): {
+  private analyzeAttachments(attachments: AttachmentInfo[]): {
     drawioPairs: Map<string, DrawioPair>;
     skipFiles: Set<string>;
   } {
     const drawioPairs = new Map<string, DrawioPair>();
     const skipFiles = new Set<string>();
-
-    if (!isConfluenceImport) {
-      return { drawioPairs, skipFiles };
-    }
 
     // Group attachments by type
     const drawioFiles: AttachmentInfo[] = [];
