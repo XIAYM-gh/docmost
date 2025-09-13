@@ -27,10 +27,10 @@ const formSchema = z.object({
   code: z
     .string()
     .refine(
-      (val) => (val.length === 6 && /^\d{6}$/.test(val)) || val.length === 8,
+      (val) => (val.length === 6 && /^\d{6}$/.test(val)) || val.length === 11,
       {
-        message: "Enter a 6-digit code or 8-character backup code",
-      },
+        message: "Enter a 6-digit code or 11-character backup code",
+      }
     ),
 });
 

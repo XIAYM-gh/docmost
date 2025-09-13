@@ -39,24 +39,27 @@ export default function useAuth() {
     setIsLoading(true);
 
     try {
-      const response = await login(data);
-      setIsLoading(false);
-
-      // Check if MFA is required
-      if (response?.userHasMfa) {
-        navigate(APP_ROUTE.AUTH.MFA_CHALLENGE);
-      } else if (response?.requiresMfaSetup) {
-        navigate(APP_ROUTE.AUTH.MFA_SETUP_REQUIRED);
-      } else {
-        navigate(APP_ROUTE.HOME);
-      }
+      await login(data);
+      navigate(APP_ROUTE.HOME);
     } catch (err) {
+      const message = err.response?.data.message;
+      switch (message) {
+        case "MFA setup required":
+          navigate(APP_ROUTE.AUTH.MFA_SETUP_REQUIRED);
+          break;
+        case "MFA verification required":
+          navigate(APP_ROUTE.AUTH.MFA_CHALLENGE);
+          break;
+        default:
+          console.log(err);
+          notifications.show({
+            message: message,
+            color: "red",
+          });
+          break;
+      }
+    } finally {
       setIsLoading(false);
-      console.log(err);
-      notifications.show({
-        message: err.response?.data.message,
-        color: "red",
-      });
     }
   };
 
@@ -70,7 +73,7 @@ export default function useAuth() {
       if (response?.requiresLogin) {
         notifications.show({
           message: t(
-            "Account created successfully. Please log in to set up two-factor authentication.",
+            "Account created successfully. Please log in to set up two-factor authentication."
           ),
         });
         navigate(APP_ROUTE.AUTH.LOGIN);
@@ -97,7 +100,7 @@ export default function useAuth() {
         if (hostname && exchangeToken) {
           window.location.href = exchangeTokenRedirectUrl(
             hostname,
-            exchangeToken,
+            exchangeToken
           );
         }
       } else {
@@ -124,7 +127,7 @@ export default function useAuth() {
       if (response?.requiresLogin) {
         notifications.show({
           message: t(
-            "Password reset was successful. Please log in with your new password.",
+            "Password reset was successful. Please log in with your new password."
           ),
         });
         navigate(APP_ROUTE.AUTH.LOGIN);

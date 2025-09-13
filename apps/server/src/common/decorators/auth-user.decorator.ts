@@ -5,9 +5,9 @@ import {
 } from '@nestjs/common';
 
 export const AuthUser = createParamDecorator(
-  (data: unknown, ctx: ExecutionContext) => {
+  (failSafe: boolean = false, ctx: ExecutionContext) => {
     const request = ctx.switchToHttp().getRequest();
-    if (!request?.user?.user) {
+    if (!request?.user?.user && !failSafe) {
       throw new BadRequestException('Invalid User');
     }
 

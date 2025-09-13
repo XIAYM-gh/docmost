@@ -1,11 +1,5 @@
 import React from "react";
-import {
-  TextInput,
-  Button,
-  Stack,
-  Text,
-  Alert,
-} from "@mantine/core";
+import { TextInput, Button, Stack, Text, Alert } from "@mantine/core";
 import { IconKey, IconAlertCircle } from "@tabler/icons-react";
 import { useTranslation } from "react-i18next";
 
@@ -33,20 +27,20 @@ export function MfaBackupCodeInput({
       <Alert icon={<IconAlertCircle size={16} />} color="blue" variant="light">
         <Text size="sm">
           {t(
-            "Enter one of your backup codes. Each backup code can only be used once.",
+            "Enter one of your backup codes. Each backup code can only be used once."
           )}
         </Text>
       </Alert>
 
       <TextInput
         label={t("Backup code")}
-        placeholder="XXXXXXXX"
+        placeholder="XXXXX-XXXXX"
         value={value}
         onChange={(e) => onChange(e.currentTarget.value.toUpperCase())}
         error={error}
         autoFocus
         data-autofocus
-        maxLength={8}
+        maxLength={11}
         styles={{
           input: {
             fontFamily: "monospace",

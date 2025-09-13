@@ -32,8 +32,8 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
   }
 
   handleRequest(err: any, user: any, info: any, ctx: ExecutionContext) {
-    if (err || !user) {
-      throw err || new UnauthorizedException();
+    if (err) {
+      throw err;
     }
 
     this.setJoinedWorkspacesCookie(user, ctx);

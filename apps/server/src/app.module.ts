@@ -15,6 +15,7 @@ import { HealthModule } from './integrations/health/health.module';
 import { ExportModule } from './integrations/export/export.module';
 import { ImportModule } from './integrations/import/import.module';
 import { SecurityModule } from './integrations/security/security.module';
+import { MFAModule } from './core/mfa-community/mfa.module';
 
 @Module({
   imports: [
@@ -36,6 +37,7 @@ import { SecurityModule } from './integrations/security/security.module';
     }),
     EventEmitterModule.forRoot(),
     SecurityModule,
+    MFAModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -29,10 +29,7 @@ import { InjectQueue } from '@nestjs/bullmq';
 import { QueueJob, QueueName } from '../../../integrations/queue/constants';
 import { Queue } from 'bullmq';
 import { EnvironmentService } from '../../../integrations/environment/environment.service';
-import {
-  validateAllowedEmail,
-  validateSsoEnforcement,
-} from '../../auth/auth.util';
+import { validateAllowedEmail } from '../../auth/auth.util';
 
 @Injectable()
 export class WorkspaceInvitationService {
@@ -205,7 +202,6 @@ export class WorkspaceInvitationService {
       throw new BadRequestException('Invalid invitation token');
     }
 
-    validateSsoEnforcement(workspace);
     validateAllowedEmail(invitation.email, workspace);
 
     let newUser: User;

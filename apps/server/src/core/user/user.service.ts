@@ -8,7 +8,6 @@ import {
 import { UpdateUserDto } from './dto/update-user.dto';
 import { comparePasswordHash } from 'src/common/helpers/utils';
 import { Workspace } from '@docmost/db/types/entity.types';
-import { validateSsoEnforcement } from '../auth/auth.util';
 
 @Injectable()
 export class UserService {
@@ -56,8 +55,6 @@ export class UserService {
     }
 
     if (updateUserDto.email && user.email != updateUserDto.email) {
-      validateSsoEnforcement(workspace);
-
       if (!updateUserDto.confirmPassword) {
         throw new BadRequestException(
           'You must provide a password to change your email',
@@ -70,7 +67,9 @@ export class UserService {
       );
 
       if (!isPasswordMatch) {
-        throw new BadRequestException('You must provide the correct password to change your email');
+        throw new BadRequestException(
+          'You must provide the correct password to change your email',
+        );
       }
 
       if (await this.userRepo.findByEmail(updateUserDto.email, workspace.id)) {

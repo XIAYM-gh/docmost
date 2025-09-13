@@ -1,5 +1,5 @@
 export interface MfaMethod {
-  type: 'totp' | 'email';
+  type: "totp" | "email";
   isEnabled: boolean;
 }
 
@@ -11,7 +11,7 @@ export interface MfaSettings {
 }
 
 export interface MfaSetupState {
-  method: 'totp' | 'email';
+  method: "totp" | "email";
   secret?: string;
   qrCode?: string;
   manualEntry?: string;
@@ -25,18 +25,16 @@ export interface MfaStatusResponse {
 }
 
 export interface MfaSetupRequest {
-  method: 'totp';
+  method: "totp";
 }
 
 export interface MfaSetupResponse {
   method: string;
-  qrCode: string;
   secret: string;
-  manualKey: string;
+  fullUri: string;
 }
 
 export interface MfaEnableRequest {
-  secret: string;
   verificationCode: string;
 }
 

@@ -6,7 +6,7 @@ import {
   Post,
   Res,
   UseGuards,
-  Logger,
+  ForbiddenException,
 } from '@nestjs/common';
 import { LoginDto } from './dto/login.dto';
 import { AuthService } from './services/auth.service';
@@ -21,18 +21,17 @@ import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
 import { ForgotPasswordDto } from './dto/forgot-password.dto';
 import { PasswordResetDto } from './dto/password-reset.dto';
 import { VerifyUserTokenDto } from './dto/verify-user-token.dto';
-import { FastifyReply } from 'fastify';
-import { validateSsoEnforcement } from './auth.util';
-import { ModuleRef } from '@nestjs/core';
+import { FastifyReply, FastifyRequest } from 'fastify';
+import { MFAService } from '../mfa-community/mfa.service';
+import { TokenService } from './services/token.service';
 
 @Controller('auth')
 export class AuthController {
-  private readonly logger = new Logger(AuthController.name);
-
   constructor(
     private authService: AuthService,
     private environmentService: EnvironmentService,
-    private moduleRef: ModuleRef,
+    private tokenService: TokenService,
+    private mfaService: MFAService,
   ) {}
 
   @HttpCode(HttpStatus.OK)
@@ -42,12 +41,28 @@ export class AuthController {
     @Res({ passthrough: true }) res: FastifyReply,
     @Body() loginInput: LoginDto,
   ) {
-    validateSsoEnforcement(workspace);
+    const user = await this.authService.tryLogin(loginInput, workspace.id);
+    const mfaStatus = await this.mfaService.getMfaStatus(user.id, workspace);
+    if (mfaStatus.requiresMfaSetup) {
+      this.setCookie(
+        res,
+        'mfaToken',
+        await this.tokenService.generateMfaToken(user, workspace.id),
+      );
 
-    // TODO: Implement custom MFA
+      throw new ForbiddenException('MFA setup required');
+    } else if (mfaStatus.userHasMfa) {
+      this.setCookie(
+        res,
+        'mfaToken',
+        await this.tokenService.generateMfaToken(user, workspace.id),
+      );
 
-    const authToken = await this.authService.login(loginInput, workspace.id);
-    this.setAuthCookie(res, authToken);
+      throw new ForbiddenException('MFA verification required');
+    }
+
+    const authToken = await this.authService.login(user, workspace.id);
+    this.setCookie(res, 'authToken', authToken);
   }
 
   @UseGuards(SetupGuard)
@@ -60,7 +75,7 @@ export class AuthController {
     const { workspace, authToken } =
       await this.authService.setup(createAdminUserDto);
 
-    this.setAuthCookie(res, authToken);
+    this.setCookie(res, 'authToken', authToken);
     return workspace;
   }
 
@@ -81,7 +96,6 @@ export class AuthController {
     @Body() forgotPasswordDto: ForgotPasswordDto,
     @AuthWorkspace() workspace: Workspace,
   ) {
-    validateSsoEnforcement(workspace);
     return this.authService.forgotPassword(forgotPasswordDto, workspace);
   }
 
@@ -104,7 +118,7 @@ export class AuthController {
     }
 
     // Set auth cookie if no MFA is required
-    this.setAuthCookie(res, result.authToken);
+    this.setCookie(res, 'authToken', result.authToken);
     return {
       requiresLogin: false,
     };
@@ -136,8 +150,8 @@ export class AuthController {
     res.clearCookie('authToken');
   }
 
-  setAuthCookie(res: FastifyReply, token: string) {
-    res.setCookie('authToken', token, {
+  setCookie(res: FastifyReply, key: string, token: string) {
+    res.setCookie(key, token, {
       httpOnly: true,
       path: '/',
       expires: this.environmentService.getCookieExpiresIn(),

@@ -38,6 +38,7 @@ import { useTranslation } from "react-i18next";
 import { setupMfa, enableMfa } from "@/ee/mfa";
 import { zodResolver } from "mantine-form-zod-resolver";
 import { z } from "zod";
+import QRCode from "qrcode";
 
 interface MfaSetupModalProps {
   opened: boolean;
@@ -48,8 +49,7 @@ interface MfaSetupModalProps {
 
 interface SetupData {
   secret: string;
-  qrCode: string;
-  manualKey: string;
+  fullUri: string;
 }
 
 const formSchema = z.object({
@@ -69,6 +69,7 @@ export function MfaSetupModal({
   const [setupData, setSetupData] = useState<SetupData | null>(null);
   const [backupCodes, setBackupCodes] = useState<string[]>([]);
   const [manualEntryOpen, setManualEntryOpen] = useState(false);
+  const [qrCodeSrc, setQrCodeSrc] = useState<String | null>(null);
 
   const form = useForm({
     validate: zodResolver(formSchema),
@@ -98,10 +99,21 @@ export function MfaSetupModal({
     }
   }, [opened]);
 
+  React.useEffect(() => {
+    if (!setupData || !setupData.fullUri) {
+      return;
+    }
+
+    async function doUpdateSrc() {
+      setQrCodeSrc(await QRCode.toDataURL(setupData.fullUri, { width: 200 }));
+    }
+
+    doUpdateSrc();
+  }, [setupData]);
+
   const enableMutation = useMutation({
     mutationFn: (verificationCode: string) =>
       enableMfa({
-        secret: setupData!.secret,
         verificationCode,
       }),
     onSuccess: (data) => {
@@ -170,7 +182,7 @@ export function MfaSetupModal({
                   <Center>
                     <Paper p="md" withBorder>
                       <Image
-                        src={setupData.qrCode}
+                        src={qrCodeSrc}
                         alt="MFA QR Code"
                         width={200}
                         height={200}
@@ -201,12 +213,12 @@ export function MfaSetupModal({
                     >
                       <Text size="sm" mb="sm">
                         {t(
-                          "Enter this code manually in your authenticator app:",
+                          "Enter this code manually in your authenticator app:"
                         )}
                       </Text>
                       <Group gap="xs">
-                        <Code block>{setupData.manualKey}</Code>
-                        <CopyButton value={setupData.manualKey}>
+                        <Code block>{setupData.secret}</Code>
+                        <CopyButton value={setupData.secret}>
                           {({ copied, copy }) => (
                             <Tooltip label={copied ? t("Copied") : t("Copy")}>
                               <ActionIcon
@@ -235,7 +247,6 @@ export function MfaSetupModal({
                       length={6}
                       type="number"
                       autoFocus
-                      data-autofocus
                       oneTimeCode
                       {...form.getInputProps("verificationCode")}
                       styles={{
@@ -285,7 +296,7 @@ export function MfaSetupModal({
             >
               <Text size="sm">
                 {t(
-                  "These codes can be used to access your account if you lose access to your authenticator app. Each code can only be used once.",
+                  "These codes can be used to access your account if you lose access to your authenticator app. Each code can only be used once."
                 )}
               </Text>
             </Alert>

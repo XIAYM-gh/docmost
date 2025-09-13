@@ -42,7 +42,7 @@ export class AuthService {
     @InjectKysely() private readonly db: KyselyDB,
   ) {}
 
-  async login(loginDto: LoginDto, workspaceId: string) {
+  async tryLogin(loginDto: LoginDto, workspaceId: string) {
     const user = await this.userRepo.findByEmail(loginDto.email, workspaceId, {
       includePassword: true,
     });
@@ -61,6 +61,10 @@ export class AuthService {
       throw new UnauthorizedException(errorMessage);
     }
 
+    return user;
+  }
+
+  async login(user: User, workspaceId: string) {
     user.lastLoginAt = new Date();
     await this.userRepo.updateLastLogin(user.id, workspaceId);
 
