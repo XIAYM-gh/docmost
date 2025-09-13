@@ -52,8 +52,26 @@ export function getSpaceUrl(spaceSlug: string) {
   return "/s/" + spaceSlug;
 }
 
+function sanitizeFileName(url: string): string {
+  const lastSlash = url.lastIndexOf("/");
+  const lastQuestionMark = url.lastIndexOf("?");
+  let finalUrl = url.substring(0, lastSlash + 1);
+  if (lastQuestionMark != -1) {
+    finalUrl += encodeURIComponent(
+      url.substring(lastSlash + 1, lastQuestionMark)
+    );
+    finalUrl += url.substring(lastQuestionMark);
+  } else {
+    finalUrl += encodeURIComponent(url.substring(lastSlash + 1));
+  }
+
+  return finalUrl;
+}
+
 export function getFileUrl(src: string) {
   if (!src) return src;
+
+  src = sanitizeFileName(src);
   if (src.startsWith("http")) return src;
   if (src.startsWith("/api/")) {
     // Remove the '/api' prefix
