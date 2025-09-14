@@ -1,5 +1,5 @@
-import { Group, Text, Box, Badge } from "@mantine/core";
-import React, { useEffect, useState } from "react";
+import { Group, Text, Box } from "@mantine/core";
+import { useEffect, useState } from "react";
 import classes from "./comment.module.css";
 import { useAtom, useAtomValue } from "jotai";
 import { timeAgo } from "@/lib/time";
@@ -7,7 +7,6 @@ import CommentEditor from "@/features/comment/components/comment-editor";
 import { pageEditorAtom } from "@/features/editor/atoms/editor-atoms";
 import CommentActions from "@/features/comment/components/comment-actions";
 import CommentMenu from "@/features/comment/components/comment-menu";
-import { useIsCloudEE } from "@/hooks/use-is-cloud-ee";
 import ResolveComment from "@/ee/comment/components/resolve-comment";
 import { useHover } from "@mantine/hooks";
 import {
@@ -45,7 +44,6 @@ function CommentListItem({
   const resolveCommentMutation = useResolveCommentMutation();
   const [currentUser] = useAtom(currentUserAtom);
   const emit = useQueryEmit();
-  const isCloudEE = useIsCloudEE();
 
   useEffect(() => {
     setContent(comment.content);
@@ -87,11 +85,9 @@ function CommentListItem({
   }
 
   async function handleResolveComment() {
-    if (!isCloudEE) return;
-    
     try {
       const isResolved = comment.resolvedAt != null;
-      
+
       await resolveCommentMutation.mutateAsync({
         commentId: comment.id,
         pageId: comment.pageId,
@@ -113,7 +109,7 @@ function CommentListItem({
 
   function handleCommentClick(comment: IComment) {
     const el = document.querySelector(
-      `.comment-mark[data-comment-id="${comment.id}"]`,
+      `.comment-mark[data-comment-id="${comment.id}"]`
     );
     if (el) {
       el.scrollIntoView({ behavior: "smooth", block: "center" });
@@ -147,7 +143,7 @@ function CommentListItem({
             </Text>
 
             <div style={{ visibility: hovered ? "visible" : "hidden" }}>
-              {!comment.parentCommentId && canComment && isCloudEE && (
+              {!comment.parentCommentId && canComment && (
                 <ResolveComment
                   editor={editor}
                   commentId={comment.id}
@@ -156,7 +152,8 @@ function CommentListItem({
                 />
               )}
 
-              {(currentUser?.user?.id === comment.creatorId || userSpaceRole === 'admin') && (
+              {(currentUser?.user?.id === comment.creatorId ||
+                userSpaceRole === "admin") && (
                 <CommentMenu
                   onEditComment={handleEditToggle}
                   onDeleteComment={handleDeleteComment}

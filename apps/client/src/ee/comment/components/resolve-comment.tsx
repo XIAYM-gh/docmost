@@ -21,7 +21,6 @@ function ResolveComment({
   const resolveCommentMutation = useResolveCommentMutation();
 
   const isResolved = resolvedAt != null;
-  const iconColor = isResolved ? "green" : "gray";
 
   const handleResolveToggle = async () => {
     try {
@@ -43,7 +42,7 @@ function ResolveComment({
 
   return (
     <Tooltip
-      label={isResolved ? t("Re-Open comment") : t("Resolve comment")}
+      label={isResolved ? t("Re-open comment") : t("Resolve comment")}
       position="top"
     >
       <ActionIcon

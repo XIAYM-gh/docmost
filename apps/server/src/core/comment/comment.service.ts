@@ -81,14 +81,8 @@ export class CommentService {
   async update(
     comment: Comment,
     updateCommentDto: UpdateCommentDto,
-    authUser: User,
   ): Promise<Comment> {
     const commentContent = JSON.parse(updateCommentDto.content);
-
-    if (comment.creatorId !== authUser.id) {
-      throw new ForbiddenException('You can only edit your own comments');
-    }
-
     const editedAt = new Date();
 
     await this.commentRepo.updateComment(
@@ -102,6 +96,41 @@ export class CommentService {
     comment.content = commentContent;
     comment.editedAt = editedAt;
     comment.updatedAt = editedAt;
+
+    return comment;
+  }
+
+  async resolve(
+    comment: Comment,
+    resolved: boolean,
+    authUser: User,
+  ): Promise<Comment> {
+    if (!!comment.resolvedAt == resolved) {
+      return comment;
+    }
+
+    let resolvedAt: Date | null = null;
+    let resolvedById: string | null = null;
+
+    if (resolved) {
+      resolvedAt = new Date();
+      resolvedById = authUser.id;
+    }
+
+    const updatedAt = resolvedAt ?? new Date();
+
+    await this.commentRepo.updateComment(
+      {
+        resolvedById,
+        resolvedAt,
+        updatedAt,
+      },
+      comment.id,
+    );
+
+    comment.resolvedAt = resolvedAt;
+    comment.resolvedById = resolvedById;
+    comment.updatedAt = updatedAt;
 
     return comment;
   }
