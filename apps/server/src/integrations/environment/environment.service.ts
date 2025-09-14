@@ -161,15 +161,8 @@ export class EnvironmentService {
     return this.configService.get<string>('DRAWIO_URL');
   }
 
-  isCloud(): boolean {
-    const cloudConfig = this.configService
-      .get<string>('CLOUD', 'false')
-      .toLowerCase();
-    return cloudConfig === 'true';
-  }
-
   isSelfHosted(): boolean {
-    return !this.isCloud();
+    return true;
   }
 
   getStripePublishableKey(): string {
@@ -184,10 +177,6 @@ export class EnvironmentService {
     return this.configService.get<string>('STRIPE_WEBHOOK_SECRET');
   }
 
-  getBillingTrialDays(): number {
-    return parseInt(this.configService.get<string>('BILLING_TRIAL_DAYS', '14'));
-  }
-
   getCollabUrl(): string {
     return this.configService.get<string>('COLLAB_URL');
   }
@@ -197,13 +186,6 @@ export class EnvironmentService {
       .get<string>('COLLAB_DISABLE_REDIS', 'false')
       .toLowerCase();
     return isStandalone === 'true';
-  }
-
-  isDisableTelemetry(): boolean {
-    const disable = this.configService
-      .get<string>('DISABLE_TELEMETRY', 'false')
-      .toLowerCase();
-    return disable === 'true';
   }
 
   getPostHogHost(): string {

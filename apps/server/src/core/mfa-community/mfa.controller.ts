@@ -256,7 +256,6 @@ export class MFAController {
   async validateMfaAccess(
     @AuthUser(true) authUser: User,
     @Req() request: FastifyRequest,
-    @Res({ passthrough: true }) res: FastifyReply,
   ): Promise<MfaAccessValidationResponse> {
     if (authUser) {
       return { valid: false };
@@ -265,9 +264,8 @@ export class MFAController {
     const user = await this.fetchValidUser(request, authUser);
     const workspace = await this.workspaceRepo.findById(user.workspaceId);
 
-    const mfa = await this.mfaRepo.findById(user.id, workspace.id);
     const mfaStatus = await this.mfaService.getMfaStatus(user.id, workspace);
-    return { valid: mfaStatus.requiresMfaSetup || (mfa && mfa.isEnabled) };
+    return { valid: mfaStatus.requiresMfaSetup || mfaStatus.userHasMfa };
   }
 
   generateBackupCodes(): string[] {

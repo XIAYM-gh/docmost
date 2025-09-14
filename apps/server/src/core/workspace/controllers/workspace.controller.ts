@@ -281,13 +281,6 @@ export class WorkspaceController {
     };
   }
 
-  @Public()
-  @HttpCode(HttpStatus.OK)
-  @Post('/check-hostname')
-  async checkHostname(@Body() checkHostnameDto: CheckHostnameDto) {
-    return this.workspaceService.checkHostname(checkHostnameDto.hostname);
-  }
-
   @HttpCode(HttpStatus.OK)
   @Post('invites/link')
   async getInviteLink(
@@ -295,10 +288,6 @@ export class WorkspaceController {
     @AuthUser() user: User,
     @AuthWorkspace() workspace: Workspace,
   ) {
-    if (this.environmentService.isCloud()) {
-      throw new ForbiddenException();
-    }
-
     const ability = this.workspaceAbility.createForUser(user, workspace);
     if (
       ability.cannot(WorkspaceCaslAction.Manage, WorkspaceCaslSubject.Member)

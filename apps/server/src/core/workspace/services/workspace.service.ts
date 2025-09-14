@@ -2,7 +2,6 @@ import {
   BadRequestException,
   ForbiddenException,
   Injectable,
-  Logger,
   NotFoundException,
 } from '@nestjs/common';
 import { CreateWorkspaceDto } from '../dto/create-workspace.dto';
@@ -25,10 +24,8 @@ import { UserRepo } from '@docmost/db/repos/user/user.repo';
 import { EnvironmentService } from '../../../integrations/environment/environment.service';
 import { DomainService } from '../../../integrations/environment/domain.service';
 import { jsonArrayFrom } from 'kysely/helpers/postgres';
-import { addDays } from 'date-fns';
-import { DISALLOWED_HOSTNAMES, WorkspaceStatus } from '../workspace.constants';
+import { DISALLOWED_HOSTNAMES } from '../workspace.constants';
 import { v4 } from 'uuid';
-import { AttachmentType } from 'src/core/attachment/attachment.constants';
 import { InjectQueue } from '@nestjs/bullmq';
 import { QueueJob, QueueName } from '../../../integrations/queue/constants';
 import { Queue } from 'bullmq';
@@ -36,8 +33,6 @@ import { generateRandomSuffixNumbers } from '../../../common/helpers';
 
 @Injectable()
 export class WorkspaceService {
-  private readonly logger = new Logger(WorkspaceService.name);
-
   constructor(
     private workspaceRepo: WorkspaceRepo,
     private spaceService: SpaceService,
@@ -102,40 +97,14 @@ export class WorkspaceService {
     createWorkspaceDto: CreateWorkspaceDto,
     trx?: KyselyTransaction,
   ) {
-    let trialEndAt = undefined;
-
     const createdWorkspace = await executeTx(
       this.db,
       async (trx) => {
-        let hostname = undefined;
-        let status = undefined;
-        let plan = undefined;
-        let billingEmail = undefined;
-
-        if (this.environmentService.isCloud()) {
-          // generate unique hostname
-          hostname = await this.generateHostname(
-            createWorkspaceDto.hostname ?? createWorkspaceDto.name,
-          );
-          trialEndAt = addDays(
-            new Date(),
-            this.environmentService.getBillingTrialDays(),
-          );
-          status = WorkspaceStatus.Active;
-          plan = 'standard';
-          billingEmail = user.email;
-        }
-
         // create workspace
         const workspace = await this.workspaceRepo.insertWorkspace(
           {
             name: createWorkspaceDto.name,
             description: createWorkspaceDto.description,
-            hostname,
-            status,
-            trialEndAt,
-            plan,
-            billingEmail,
           },
           trx,
         );
@@ -211,26 +180,6 @@ export class WorkspaceService {
       trx,
     );
 
-    if (this.environmentService.isCloud() && trialEndAt) {
-      try {
-        const delay = trialEndAt.getTime() - Date.now();
-
-        await this.billingQueue.add(
-          QueueJob.TRIAL_ENDED,
-          { workspaceId: createdWorkspace.id },
-          { delay },
-        );
-
-        await this.billingQueue.add(
-          QueueJob.WELCOME_EMAIL,
-          { userId: user.id },
-          { delay: 60 * 1000 }, // 1m
-        );
-      } catch (err) {
-        this.logger.error(err);
-      }
-    }
-
     return createdWorkspace;
   }
 
@@ -267,21 +216,6 @@ export class WorkspaceService {
   }
 
   async update(workspaceId: string, updateWorkspaceDto: UpdateWorkspaceDto) {
-    if (updateWorkspaceDto.enforceSso) {
-      const sso = await this.db
-        .selectFrom('authProviders')
-        .selectAll()
-        .where('isEnabled', '=', true)
-        .where('workspaceId', '=', workspaceId)
-        .execute();
-
-      if (sso && sso?.length === 0) {
-        throw new BadRequestException(
-          'There must be at least one active SSO provider to enforce SSO.',
-        );
-      }
-    }
-
     if (updateWorkspaceDto.emailDomains) {
       const regex =
         /(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z0-9][a-z0-9-]{0,61}[a-z0-9]/;
@@ -410,14 +344,6 @@ export class WorkspaceService {
     }
 
     return uniqueHostname;
-  }
-
-  async checkHostname(hostname: string) {
-    const exists = await this.workspaceRepo.hostnameExists(hostname);
-    if (!exists) {
-      throw new NotFoundException('Hostname not found');
-    }
-    return { hostname: this.domainService.getUrl(hostname) };
   }
 
   async deleteUser(

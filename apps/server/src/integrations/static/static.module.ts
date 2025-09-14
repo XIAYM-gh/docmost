@@ -34,19 +34,15 @@ export class StaticModule implements OnModuleInit {
       const configString = {
         ENV: this.environmentService.getNodeEnv(),
         APP_URL: this.environmentService.getAppUrl(),
-        CLOUD: this.environmentService.isCloud(),
+        CLOUD: false,
         FILE_UPLOAD_SIZE_LIMIT:
           this.environmentService.getFileUploadSizeLimit(),
         FILE_IMPORT_SIZE_LIMIT:
           this.environmentService.getFileImportSizeLimit(),
         DRAWIO_URL: this.environmentService.getDrawioUrl(),
-        SUBDOMAIN_HOST: this.environmentService.isCloud()
-          ? this.environmentService.getSubdomainHost()
-          : undefined,
+        SUBDOMAIN_HOST: undefined,
         COLLAB_URL: this.environmentService.getCollabUrl(),
-        BILLING_TRIAL_DAYS: this.environmentService.isCloud()
-          ? this.environmentService.getBillingTrialDays()
-          : undefined,
+        BILLING_TRIAL_DAYS: undefined,
         POSTHOG_HOST: this.environmentService.getPostHogHost(),
         POSTHOG_KEY: this.environmentService.getPostHogKey(),
       };

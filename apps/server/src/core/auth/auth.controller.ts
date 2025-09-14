@@ -21,7 +21,7 @@ import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
 import { ForgotPasswordDto } from './dto/forgot-password.dto';
 import { PasswordResetDto } from './dto/password-reset.dto';
 import { VerifyUserTokenDto } from './dto/verify-user-token.dto';
-import { FastifyReply, FastifyRequest } from 'fastify';
+import { FastifyReply } from 'fastify';
 import { MFAService } from '../mfa-community/mfa.service';
 import { TokenService } from './services/token.service';
 

@@ -1,20 +1,11 @@
-import {
-  ExecutionContext,
-  Injectable,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { ExecutionContext, Injectable } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { IS_PUBLIC_KEY } from '../decorators/public.decorator';
 import { Reflector } from '@nestjs/core';
-import { EnvironmentService } from '../../integrations/environment/environment.service';
-import { addDays } from 'date-fns';
 
 @Injectable()
 export class JwtAuthGuard extends AuthGuard('jwt') {
-  constructor(
-    private reflector: Reflector,
-    private environmentService: EnvironmentService,
-  ) {
+  constructor(private reflector: Reflector) {
     super();
   }
 
@@ -36,36 +27,6 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
       throw err;
     }
 
-    this.setJoinedWorkspacesCookie(user, ctx);
     return user;
-  }
-
-  setJoinedWorkspacesCookie(user: any, ctx: ExecutionContext) {
-    if (this.environmentService.isCloud()) {
-      const req = ctx.switchToHttp().getRequest();
-      const res = ctx.switchToHttp().getResponse();
-
-      const workspaceId = user?.workspace?.id;
-      let workspaceIds = [];
-      try {
-        workspaceIds = req.cookies.joinedWorkspaces
-          ? JSON.parse(req.cookies.joinedWorkspaces)
-          : [];
-      } catch (err) {
-        /* empty */
-      }
-
-      if (!workspaceIds.includes(workspaceId)) {
-        workspaceIds.push(workspaceId);
-      }
-
-      res.setCookie('joinedWorkspaces', JSON.stringify(workspaceIds), {
-        httpOnly: false,
-        domain: '.' + this.environmentService.getSubdomainHost(),
-        path: '/',
-        expires: addDays(new Date(), 365),
-        secure: this.environmentService.isHttps(),
-      });
-    }
   }
 }

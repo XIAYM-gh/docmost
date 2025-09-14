@@ -7,7 +7,6 @@ import { UserMFA, Workspace } from '@docmost/db/types/entity.types';
 export interface MfaStatus {
   userHasMfa: boolean;
   requiresMfaSetup: boolean;
-  isMfaEnforced: boolean; // never used
 }
 
 @Injectable()
@@ -60,7 +59,6 @@ export class MFAService {
     return {
       userHasMfa: mfa && mfa.isEnabled,
       requiresMfaSetup: workspace.enforceMfa && !(mfa && mfa.isEnabled),
-      isMfaEnforced: workspace.enforceMfa,
     };
   }
 }

@@ -173,7 +173,6 @@ export class WorkspaceInvitationService {
           invitation.email,
           invitation.token,
           authUser.name,
-          workspace.hostname,
         );
       });
     }
@@ -291,12 +290,6 @@ export class WorkspaceInvitationService {
       });
     }
 
-    if (this.environmentService.isCloud()) {
-      await this.billingQueue.add(QueueJob.STRIPE_SEATS_SYNC, {
-        workspaceId: workspace.id,
-      });
-    }
-
     if (workspace.enforceMfa) {
       return {
         requiresLogin: true,
@@ -332,7 +325,6 @@ export class WorkspaceInvitationService {
       invitation.email,
       invitation.token,
       invitedByUser.name,
-      workspace.hostname,
     );
   }
 
@@ -355,17 +347,15 @@ export class WorkspaceInvitationService {
     return this.buildInviteLink({
       invitationId,
       inviteToken: token.token,
-      hostname: workspace.hostname,
     });
   }
 
   async buildInviteLink(opts: {
     invitationId: string;
     inviteToken: string;
-    hostname?: string;
   }): Promise<string> {
-    const { invitationId, inviteToken, hostname } = opts;
-    return `${this.domainService.getUrl(hostname)}/invites/${invitationId}?token=${inviteToken}`;
+    const { invitationId, inviteToken } = opts;
+    return `${this.domainService.getUrl()}/invites/${invitationId}?token=${inviteToken}`;
   }
 
   async sendInvitationMail(
@@ -373,12 +363,10 @@ export class WorkspaceInvitationService {
     inviteeEmail: string,
     inviteToken: string,
     invitedByName: string,
-    hostname?: string,
   ): Promise<void> {
     const inviteLink = await this.buildInviteLink({
       invitationId,
       inviteToken,
-      hostname,
     });
 
     const emailTemplate = InvitationEmail({
