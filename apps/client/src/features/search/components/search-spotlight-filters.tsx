@@ -5,7 +5,6 @@ import {
   Text,
   TextInput,
   Divider,
-  Badge,
   ScrollArea,
   Avatar,
   Group,
@@ -22,7 +21,6 @@ import { useTranslation } from "react-i18next";
 import { useDebouncedValue } from "@mantine/hooks";
 import { useGetSpacesQuery } from "@/features/space/queries/space-query";
 import classes from "./search-spotlight-filters.module.css";
-import { isCloud } from "@/lib/config.ts";
 
 interface SearchSpotlightFiltersProps {
   onFiltersChange?: (filters: any) => void;
@@ -209,7 +207,7 @@ export function SearchSpotlightFilters({
             fw={500}
           >
             {contentType
-              ? `${t("Type")}: ${contentTypeOptions.find((opt) => opt.value === contentType)?.label || t(contentType === "page" ? "Pages" : "Attachments")}`
+              ? `${t("Type")}: ${contentTypeOptions.find((opt) => opt.value === contentType)?.label || t("Pages")}`
               : t("Type")}
           </Button>
         </Menu.Target>
@@ -224,6 +222,9 @@ export function SearchSpotlightFilters({
             >
               <Group flex="1" gap="xs">
                 {contentType === option.value && <IconCheck size={20} />}
+                <div>
+                  <Text size="sm">{option.label}</Text>
+                </div>
               </Group>
             </Menu.Item>
           ))}
