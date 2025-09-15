@@ -1,6 +1,5 @@
 import api from "@/lib/api-client";
 import {
-  IAttachmentSearch,
   IPageSearch,
   IPageSearchParams,
   ISuggestionResult,
