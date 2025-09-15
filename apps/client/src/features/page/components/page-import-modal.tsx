@@ -5,7 +5,6 @@ import {
   FileButton,
   Group,
   Text,
-  Tooltip,
 } from "@mantine/core";
 import {
   IconBrandNotion,
@@ -24,7 +23,7 @@ import { treeDataAtom } from "@/features/page/tree/atoms/tree-data-atom.ts";
 import { useAtom } from "jotai";
 import { buildTree } from "@/features/page/tree/utils";
 import { IPage } from "@/features/page/types/page.types.ts";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { getFileImportSizeLimit, isCloud } from "@/lib/config.ts";
 import { formatBytes } from "@/lib";
@@ -83,6 +82,11 @@ function ImportFormatSelection({ spaceId, onClose }: ImportFormatSelection) {
   const [fileTaskId, setFileTaskId] = useState<string | null>(null);
   const emit = useQueryEmit();
 
+  const markdownFileRef = useRef<() => void>(null);
+  const htmlFileRef = useRef<() => void>(null);
+  const notionFileRef = useRef<() => void>(null);
+  const zipFileRef = useRef<() => void>(null);
+
   const handleZipUpload = async (selectedFile: File, source: string) => {
     if (!selectedFile) {
       return;
@@ -113,6 +117,13 @@ function ImportFormatSelection({ spaceId, onClose }: ImportFormatSelection) {
       });
 
       setFileTaskId(importTask.id);
+
+      // Reset file input after successful upload
+      if (source === "notion" && notionFileRef.current) {
+        notionFileRef.current();
+      } else if (source === "generic" && zipFileRef.current) {
+        zipFileRef.current();
+      }
     } catch (err) {
       console.log("Failed to upload import file", err);
       notifications.update({
@@ -240,6 +251,10 @@ function ImportFormatSelection({ spaceId, onClose }: ImportFormatSelection) {
         setTreeData(fullTree);
       }
 
+      // Reset file inputs after successful upload
+      if (markdownFileRef.current) markdownFileRef.current();
+      if (htmlFileRef.current) htmlFileRef.current();
+
       const pageCountText =
         pageCount === 1 ? `1 ${t("page")}` : `${pageCount} ${t("pages")}`;
 
@@ -269,7 +284,12 @@ function ImportFormatSelection({ spaceId, onClose }: ImportFormatSelection) {
   return (
     <>
       <SimpleGrid cols={2}>
-        <FileButton onChange={handleFileUpload} accept=".md" multiple>
+        <FileButton
+          onChange={handleFileUpload}
+          accept=".md"
+          multiple
+          resetRef={markdownFileRef}
+        >
           {(props) => (
             <Button
               justify="start"
@@ -282,7 +302,12 @@ function ImportFormatSelection({ spaceId, onClose }: ImportFormatSelection) {
           )}
         </FileButton>
 
-        <FileButton onChange={handleFileUpload} accept="text/html" multiple>
+        <FileButton
+          onChange={handleFileUpload}
+          accept="text/html"
+          multiple
+          resetRef={htmlFileRef}
+        >
           {(props) => (
             <Button
               justify="start"
@@ -298,6 +323,7 @@ function ImportFormatSelection({ spaceId, onClose }: ImportFormatSelection) {
         <FileButton
           onChange={(file) => handleZipUpload(file, "notion")}
           accept="application/zip"
+          resetRef={notionFileRef}
         >
           {(props) => (
             <Button
@@ -328,6 +354,7 @@ function ImportFormatSelection({ spaceId, onClose }: ImportFormatSelection) {
           <FileButton
             onChange={(file) => handleZipUpload(file, "generic")}
             accept="application/zip"
+            resetRef={zipFileRef}
           >
             {(props) => (
               <Group justify="center">
