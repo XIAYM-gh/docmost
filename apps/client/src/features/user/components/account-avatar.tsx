@@ -45,14 +45,16 @@ export default function AccountAvatar() {
   };
 
   return (
-    <AvatarUploader
-      currentImageUrl={currentUser?.user.avatarUrl}
-      fallbackName={currentUser?.user.name}
-      size="60px"
-      type={AvatarIconType.AVATAR}
-      onUpload={handleUpload}
-      onRemove={handleRemove}
-      isLoading={isLoading}
-    />
+    <div style={{ marginBottom: "24px" }}>
+      <AvatarUploader
+        currentImageUrl={currentUser?.user.avatarUrl}
+        fallbackName={currentUser?.user.name}
+        size="60px"
+        type={AvatarIconType.AVATAR}
+        onUpload={handleUpload}
+        onRemove={handleRemove}
+        isLoading={isLoading}
+      />
+    </div>
   );
 }
