@@ -4,8 +4,10 @@ import { Group, Paper, SimpleGrid, Text, TextInput } from "@mantine/core";
 import { useAtom } from "jotai";
 import { workspaceAtom } from "@/features/user/atoms/current-user-atom.ts";
 import CopyTextButton from "@/components/common/copy.tsx";
+import { useTranslation } from "react-i18next";
 
 export default function InstallationDetails() {
+  const { t } = useTranslation();
   const { isAdmin } = useUserRole();
   const [workspace] = useAtom(workspaceAtom);
 
@@ -26,7 +28,7 @@ export default function InstallationDetails() {
                 fz="xs"
                 className={classes.label}
               >
-                Workspace ID
+                {t("Workspace ID")}
               </Text>
               <TextInput
                 style={{ fontWeight: 700 }}
@@ -50,7 +52,7 @@ export default function InstallationDetails() {
                 fz="xs"
                 className={classes.label}
               >
-                Member count
+                {t("Member count")}
               </Text>
               <Text fw={700} fz="lg" tt="capitalize">
                 {workspace?.memberCount}

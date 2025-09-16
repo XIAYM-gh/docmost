@@ -526,5 +526,16 @@
   "{{ssoProviderType}} configuration": "{{ssoProviderType}} 配置",
   "Security": "安全",
   "System": "系统",
-  "License & Edition": "许可证及版本"
+  "License & Edition": "许可证及版本",
+  "Icon": "图标",
+  "Upload image": "上传图像",
+  "Remove image": "移除图像",
+  "Failed to upload image": "上传图像失败",
+  "Failed to remove image": "移除图像失败",
+  "Image removed successfully": "图像移除成功",
+  "License": "许可证",
+  "Workspace ID": "工作区 ID",
+  "Member count": "成员数量",
+  "Edition": "版本",
+  "Open Source": "开源版"
 }

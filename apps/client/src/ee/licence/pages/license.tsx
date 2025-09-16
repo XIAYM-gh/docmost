@@ -4,11 +4,10 @@ import SettingsTitle from "@/components/settings/settings-title.tsx";
 import useUserRole from "@/hooks/use-user-role.tsx";
 import InstallationDetails from "@/ee/licence/components/installation-details.tsx";
 import OssDetails from "@/ee/licence/components/oss-details.tsx";
-import { useAtom } from "jotai/index";
-import { workspaceAtom } from "@/features/user/atoms/current-user-atom.ts";
+import { useTranslation } from "react-i18next";
 
 export default function License() {
-  const [workspace] = useAtom(workspaceAtom);
+  const { t } = useTranslation();
   const { isAdmin } = useUserRole();
 
   if (!isAdmin) {
@@ -21,7 +20,7 @@ export default function License() {
         <title>License - {getAppName()}</title>
       </Helmet>
 
-      <SettingsTitle title="License" />
+      <SettingsTitle title={t("License")} />
 
       <InstallationDetails />
       <OssDetails />
