@@ -1,20 +1,17 @@
-<div align="center">
-    <h1><b>Docmost</b></h1>
-    <p>
-        Open-source collaborative wiki and documentation software.
-        <br />
-        <a href="https://docmost.com"><strong>Website</strong></a> | 
-        <a href="https://docmost.com/docs"><strong>Documentation</strong></a> |
-        <a href="https://twitter.com/DocmostHQ"><strong>Twitter / X</strong></a>
-    </p>
-</div>
-<br />
+# Docmost (forked)
 
-## Getting started
+A derivative of [Docmost](https://github.com/docmost/docmost), trying keeping it clean and simple.
 
-To get started with Docmost, please refer to our [documentation](https://docmost.com/docs) or try our [cloud version](https://docmost.com/pricing) .
+> [!WARNING]
+> This is a personal fork with learning and educational purpose, please consider buying a EE license to support the original authors.
+>
+> Updates are not guaranteed because I only have very limited time.
+>
+> Bugs may arise, please report them through GitHub issues.
 
 ## Features
+
+From upstream:
 
 - Real-time collaboration
 - Diagrams (Draw.io, Excalidraw and Mermaid)
@@ -26,37 +23,65 @@ To get started with Docmost, please refer to our [documentation](https://docmost
 - Search
 - File attachments
 - Embeds (Airtable, Loom, Miro and more)
-- Translations (10+ languages)
 
-### Screenshots
+Ours modifications:
 
-<p align="center">
-<img alt="home" src="https://docmost.com/screenshots/home.png" width="70%">
-<img alt="editor" src="https://docmost.com/screenshots/editor.png" width="70%">
-</p>
+- Basic MFA feature (TOTP only)
+- Resolving comments
+- Clean up useless cloud modules and enterprise edition features, including telemetry
 
-### License
-Docmost core is licensed under the open-source AGPL 3.0 license.  
-Enterprise features are available under an enterprise license (Enterprise Edition).  
+## Getting Started
 
-All files in the following directories are licensed under the Docmost Enterprise license defined in `packages/ee/License`.
-  - apps/server/src/ee
-  - apps/client/src/ee
-  - packages/ee
+### Requirements
 
-### Contributing
+- NodeJS runtime
+- Valid `pnpm` installation
+- PostgreSQL server
+- Redis/Valkey server
 
-See the [development documentation](https://docmost.com/docs/self-hosting/development)
+### Building & Running
 
-## Thanks
-Special thanks to;
+`pnpm` is used to manage dependencies and build the project. Please follow the instructions below to compile it.
 
-<img width="100" alt="Crowdin" src="https://github.com/user-attachments/assets/a6c3d352-e41b-448d-b6cd-3fbca3109f07" />
+```shell
+# Clone this repository first
+git clone https://github.com/XIAYM-gh/docmost
+cd docmost
 
-[Crowdin](https://crowdin.com/) for providing access to their localization platform.
+# Then install dependencies
+pnpm i
 
+# Build the entire project (skip this if you want to run Docmost in development mode)
+pnpm build
+```
 
-<img width="48" alt="Algolia-mark-square-white" src="https://github.com/user-attachments/assets/6ccad04a-9589-4965-b6a1-d5cb1f4f9e94" />
+After compiling the project, you need to configure the dotenv file, of which you can refer to [the official documentation](https://docmost.com/docs/self-hosting/environment-variables) for help.
 
-[Algolia](https://www.algolia.com/) for providing full-text search to the docs.
+```shell
+cp .env.example .env
 
+# Then edit the .env file, e.g. using vim
+vim .env
+```
+
+Now please ensure PosgreSQL and Redis (or Valkey) is running. Eventually you can run the server as follows.
+
+```shell
+# Running in production mode (recommended)
+pnpm run server:start
+
+# Or in development mode, which provides more debug information
+pnpm nx run server:start
+
+# Additionally, you can run it in watch mode
+pnpm nx run client:dev
+pnpm nx run server:start:dev
+```
+
+## License
+
+Docmost core is licensed under the open-source AGPL 3.0 license. Please refer to the upstream repository for more details.
+
+## Acknowledgement
+
+Thanks the original Docmost team for their valuable contributions!
