@@ -139,7 +139,7 @@ export class MFAController {
       throw new BadRequestException('Your MFA is already enabled');
     }
 
-    if (!(await this.mfaService.validate(user.id, workspace.id, code))) {
+    if (!(await this.mfaService.validate(user.id, workspace.id, code, false))) {
       throw new BadRequestException('Invalid code, please try again.');
     }
 

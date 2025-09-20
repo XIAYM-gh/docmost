@@ -24,6 +24,7 @@ export class MFAService {
     userId: string,
     workspaceId: string,
     code: string,
+    useBackupCode: boolean = true,
   ): Promise<boolean> {
     const mfa = await this.mfaRepo.findById(userId, workspaceId);
     return (
@@ -32,7 +33,8 @@ export class MFAService {
         token: code,
         secret: mfa.secret,
       }) ||
-        (await this.validateBackupCode(userId, workspaceId, mfa, code)))
+        (useBackupCode &&
+          (await this.validateBackupCode(userId, workspaceId, mfa, code))))
     );
   }
 
@@ -42,7 +44,7 @@ export class MFAService {
     mfa: UserMFA,
     code: string,
   ) {
-    if (mfa.backupCodes.includes(code)) {
+    if (mfa.backupCodes && mfa.backupCodes.includes(code)) {
       await this.mfaRepo.updateMFA(userId, workspaceId, {
         backupCodes: mfa.backupCodes.filter((it) => it != code),
       });
