@@ -138,92 +138,92 @@ export default function ShareModal({ readOnly }: ShareModalProps) {
         </Button>
       </Popover.Target>
       <Popover.Dropdown style={{ userSelect: "none" }}>
-        isDescendantShared ? (
-        <>
-          <Text size="sm">{t("Inherits public sharing from")}</Text>
-          <Anchor
-            size="sm"
-            underline="never"
-            style={{
-              cursor: "pointer",
-              color: "var(--mantine-color-text)",
-            }}
-            component={Link}
-            to={buildPageUrl(
-              spaceSlug,
-              share.sharedPage.slugId,
-              share.sharedPage.title
-            )}
-          >
-            <Group gap="4" wrap="nowrap" my="sm">
-              {getPageIcon(share.sharedPage.icon)}
-              <div className={classes.shareLinkText}>
-                <Text fz="sm" fw={500} lineClamp={1}>
-                  {share.sharedPage.title || t("untitled")}
+        {isDescendantShared ? (
+          <>
+            <Text size="sm">{t("Inherits public sharing from")}</Text>
+            <Anchor
+              size="sm"
+              underline="never"
+              style={{
+                cursor: "pointer",
+                color: "var(--mantine-color-text)",
+              }}
+              component={Link}
+              to={buildPageUrl(
+                spaceSlug,
+                share.sharedPage.slugId,
+                share.sharedPage.title
+              )}
+            >
+              <Group gap="4" wrap="nowrap" my="sm">
+                {getPageIcon(share.sharedPage.icon)}
+                <div className={classes.shareLinkText}>
+                  <Text fz="sm" fw={500} lineClamp={1}>
+                    {share.sharedPage.title || t("untitled")}
+                  </Text>
+                </div>
+              </Group>
+            </Anchor>
+
+            {shareLink}
+          </>
+        ) : (
+          <>
+            <Group justify="space-between" wrap="nowrap" gap="xl">
+              <div>
+                <Text size="sm">
+                  {isPagePublic ? t("Shared to web") : t("Share to web")}
+                </Text>
+                <Text size="xs" c="dimmed">
+                  {isPagePublic
+                    ? t("Anyone with the link can view this page")
+                    : t("Make this page publicly accessible")}
                 </Text>
               </div>
+              <Switch
+                onChange={handleChange}
+                defaultChecked={isPagePublic}
+                disabled={readOnly}
+                size="xs"
+              />
             </Group>
-          </Anchor>
 
-          {shareLink}
-        </>
-        ) : (
-        <>
-          <Group justify="space-between" wrap="nowrap" gap="xl">
-            <div>
-              <Text size="sm">
-                {isPagePublic ? t("Shared to web") : t("Share to web")}
-              </Text>
-              <Text size="xs" c="dimmed">
-                {isPagePublic
-                  ? t("Anyone with the link can view this page")
-                  : t("Make this page publicly accessible")}
-              </Text>
-            </div>
-            <Switch
-              onChange={handleChange}
-              defaultChecked={isPagePublic}
-              disabled={readOnly}
-              size="xs"
-            />
-          </Group>
+            {pageIsShared && (
+              <>
+                {shareLink}
+                <Group justify="space-between" wrap="nowrap" gap="xl">
+                  <div>
+                    <Text size="sm">{t("Include sub-pages")}</Text>
+                    <Text size="xs" c="dimmed">
+                      {t("Make sub-pages public too")}
+                    </Text>
+                  </div>
 
-          {pageIsShared && (
-            <>
-              {shareLink}
-              <Group justify="space-between" wrap="nowrap" gap="xl">
-                <div>
-                  <Text size="sm">{t("Include sub-pages")}</Text>
-                  <Text size="xs" c="dimmed">
-                    {t("Make sub-pages public too")}
-                  </Text>
-                </div>
-
-                <Switch
-                  onChange={handleSubPagesChange}
-                  checked={share.includeSubPages}
-                  size="xs"
-                  disabled={readOnly}
-                />
-              </Group>
-              <Group justify="space-between" wrap="nowrap" gap="xl" mt="sm">
-                <div>
-                  <Text size="sm">{t("Search engine indexing")}</Text>
-                  <Text size="xs" c="dimmed">
-                    {t("Allow search engines to index page")}
-                  </Text>
-                </div>
-                <Switch
-                  onChange={handleIndexSearchChange}
-                  checked={share.searchIndexing}
-                  size="xs"
-                  disabled={readOnly}
-                />
-              </Group>
-            </>
-          )}
-        </>
-        )
+                  <Switch
+                    onChange={handleSubPagesChange}
+                    checked={share.includeSubPages}
+                    size="xs"
+                    disabled={readOnly}
+                  />
+                </Group>
+                <Group justify="space-between" wrap="nowrap" gap="xl" mt="sm">
+                  <div>
+                    <Text size="sm">{t("Search engine indexing")}</Text>
+                    <Text size="xs" c="dimmed">
+                      {t("Allow search engines to index page")}
+                    </Text>
+                  </div>
+                  <Switch
+                    onChange={handleIndexSearchChange}
+                    checked={share.searchIndexing}
+                    size="xs"
+                    disabled={readOnly}
+                  />
+                </Group>
+              </>
+            )}
+          </>
+        )}
       </Popover.Dropdown>
     </Popover>
   );
