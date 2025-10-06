@@ -1,14 +1,12 @@
 import { useAppVersion } from "@/features/workspace/queries/workspace-query.ts";
-import { isCloud } from "@/lib/config.ts";
 import classes from "@/components/settings/settings.module.css";
 import { Indicator, Text, Tooltip } from "@mantine/core";
-import React from "react";
 import semverGt from "semver/functions/gt";
 import { useTranslation } from "react-i18next";
 
 export default function AppVersion() {
   const { t } = useTranslation();
-  const { data: appVersion } = useAppVersion(!isCloud());
+  const { data: appVersion } = useAppVersion(true);
   let hasUpdate = false;
   try {
     hasUpdate =
@@ -38,7 +36,7 @@ export default function AppVersion() {
           onClick={() => {
             window.open(
               "https://github.com/docmost/docmost/releases",
-              "_blank",
+              "_blank"
             );
           }}
         >

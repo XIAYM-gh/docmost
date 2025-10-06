@@ -1,5 +1,4 @@
 import { Menu, ActionIcon, Text } from "@mantine/core";
-import React from "react";
 import { IconCopy, IconDots, IconSend, IconTrash } from "@tabler/icons-react";
 import { modals } from "@mantine/modals";
 import {
@@ -11,7 +10,6 @@ import { notifications } from "@mantine/notifications";
 import { useClipboard } from "@mantine/hooks";
 import { getInviteLink } from "@/features/workspace/services/workspace-service.ts";
 import useUserRole from "@/hooks/use-user-role.tsx";
-import { isCloud } from "@/lib/config.ts";
 
 interface Props {
   invitationId: string;
@@ -50,7 +48,7 @@ export default function InviteActionMenu({ invitationId }: Props) {
       children: (
         <Text size="sm">
           {t(
-            "Are you sure you want to revoke this invitation? The user will not be able to join the workspace.",
+            "Are you sure you want to revoke this invitation? The user will not be able to join the workspace."
           )}
         </Text>
       ),
@@ -77,15 +75,13 @@ export default function InviteActionMenu({ invitationId }: Props) {
         </Menu.Target>
 
         <Menu.Dropdown>
-          {!isCloud() && (
-            <Menu.Item
-              onClick={() => handleCopyLink(invitationId)}
-              leftSection={<IconCopy size={16} />}
-              disabled={!isAdmin}
-            >
-              {t("Copy link")}
-            </Menu.Item>
-          )}
+          <Menu.Item
+            onClick={() => handleCopyLink(invitationId)}
+            leftSection={<IconCopy size={16} />}
+            disabled={!isAdmin}
+          >
+            {t("Copy link")}
+          </Menu.Item>
 
           <Menu.Item
             onClick={onResend}
