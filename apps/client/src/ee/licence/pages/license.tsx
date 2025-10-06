@@ -17,7 +17,9 @@ export default function License() {
   return (
     <>
       <Helmet>
-        <title>License - {getAppName()}</title>
+        <title>
+          {t("License")} - {getAppName()}
+        </title>
       </Helmet>
 
       <SettingsTitle title={t("License")} />

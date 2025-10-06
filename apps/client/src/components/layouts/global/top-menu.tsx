@@ -67,7 +67,7 @@ export default function TopMenu() {
           to={APP_ROUTE.SETTINGS.WORKSPACE.GENERAL}
           leftSection={<IconSettings size={16} />}
         >
-          {t("Workspace settings")}
+          {t("Workspace Settings")}
         </Menu.Item>
 
         <Menu.Item
@@ -75,7 +75,7 @@ export default function TopMenu() {
           to={APP_ROUTE.SETTINGS.WORKSPACE.MEMBERS}
           leftSection={<IconUsers size={16} />}
         >
-          {t("Manage members")}
+          {t("Manage Members")}
         </Menu.Item>
 
         <Menu.Divider />

@@ -41,7 +41,7 @@ import { SpaceTreeNode } from "@/features/page/tree/types";
 import { useQueryEmit } from "@/features/websocket/use-query-emit";
 
 export function usePageQuery(
-  pageInput: Partial<IPageInput>,
+  pageInput: Partial<IPageInput>
 ): UseQueryResult<IPage, Error> {
   const query = useQuery({
     queryKey: ["pages", pageInput.pageId],
@@ -96,7 +96,7 @@ export function updatePageData(data: IPage) {
     data.parentPageId,
     data.id,
     data.title,
-    data.icon,
+    data.icon
   );
 }
 
@@ -110,14 +110,12 @@ export function useUpdatePageMutation() {
   return useMutation<IPage, Error, Partial<IPageInput>>({
     mutationFn: (data) => updatePage(data),
     onSuccess: (data) => {
-      updatePage(data);
-
       invalidateOnUpdatePage(
         data.spaceId,
         data.parentPageId,
         data.id,
         data.title,
-        data.icon,
+        data.icon
       );
     },
   });
@@ -248,7 +246,7 @@ export function useRestorePageMutation() {
 }
 
 export function useGetSidebarPagesQuery(
-  data: SidebarPagesParams | null,
+  data: SidebarPagesParams | null
 ): UseInfiniteQueryResult<InfiniteData<IPagination<IPage>, unknown>> {
   return useInfiniteQuery({
     queryKey: ["sidebar-pages", data],
@@ -277,7 +275,7 @@ export function useGetRootSidebarPagesQuery(data: SidebarPagesParams) {
 }
 
 export function usePageBreadcrumbsQuery(
-  pageId: string,
+  pageId: string
 ): UseQueryResult<Partial<IPage[]>, Error> {
   return useQuery({
     queryKey: ["breadcrumbs", pageId],
@@ -299,7 +297,7 @@ export async function fetchAllAncestorChildren(params: SidebarPagesParams) {
 }
 
 export function useRecentChangesQuery(
-  spaceId?: string,
+  spaceId?: string
 ): UseQueryResult<IPagination<IPage>, Error> {
   return useQuery({
     queryKey: ["recent-changes", spaceId],
@@ -310,7 +308,7 @@ export function useRecentChangesQuery(
 
 export function useDeletedPagesQuery(
   spaceId: string,
-  params?: QueryParams,
+  params?: QueryParams
 ): UseQueryResult<IPagination<IPage>, Error> {
   return useQuery({
     queryKey: ["trash-list", spaceId, params],
@@ -362,7 +360,7 @@ export function invalidateOnCreatePage(data: Partial<IPage>) {
           return page;
         }),
       };
-    },
+    }
   );
 
   //update sidebar haschildren
@@ -383,7 +381,7 @@ export function invalidateOnCreatePage(data: Partial<IPage>) {
             items: page.items.map((sidebarPage: IPage) =>
               sidebarPage.id === data.parentPageId
                 ? { ...sidebarPage, hasChildren: true }
-                : sidebarPage,
+                : sidebarPage
             ),
           })),
         };
@@ -406,7 +404,7 @@ export function invalidateOnCreatePage(data: Partial<IPage>) {
             items: page.items.map((sidebarPage: IPage) =>
               sidebarPage.id === data.parentPageId
                 ? { ...sidebarPage, hasChildren: true }
-                : sidebarPage,
+                : sidebarPage
             ),
           })),
         };
@@ -425,7 +423,7 @@ export function invalidateOnUpdatePage(
   parentPageId: string,
   id: string,
   title: string,
-  icon: string,
+  icon: string
 ) {
   let queryKey: QueryKey = null;
   if (parentPageId === null) {
@@ -445,11 +443,11 @@ export function invalidateOnUpdatePage(
           items: page.items.map((sidebarPage: IPage) =>
             sidebarPage.id === id
               ? { ...sidebarPage, title: title, icon: icon }
-              : sidebarPage,
+              : sidebarPage
           ),
         })),
       };
-    },
+    }
   );
 
   //update recent changes
@@ -487,7 +485,7 @@ export function invalidateOnDeletePage(pageId: string) {
         pages: old.pages.map((page) => ({
           ...page,
           items: page.items.filter(
-            (sidebarPage: IPage) => sidebarPage.id !== pageId,
+            (sidebarPage: IPage) => sidebarPage.id !== pageId
           ),
         })),
       };

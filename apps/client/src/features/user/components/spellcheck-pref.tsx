@@ -13,7 +13,9 @@ export default function SpellcheckPref() {
       <div>
         <Text size="md">{t("Spellcheck")}</Text>
         <Text size="sm" c="dimmed">
-          {t("Choose if spellcheck is enabled.")}
+          {t(
+            "Choose if spellcheck is enabled, which depends on settings of your browser and system."
+          )}
         </Text>
       </div>
 
@@ -31,7 +33,7 @@ export function SpellcheckToggle({ size, label }: SpellcheckToggleProps) {
   const { t } = useTranslation();
   const [user, setUser] = useAtom(userAtom);
   const [checked, setChecked] = useState(
-    user.settings?.preferences?.spellcheck ?? true,
+    user.settings?.preferences?.spellcheck ?? true
   );
 
   const handleChange = async (event: React.ChangeEvent<HTMLInputElement>) => {

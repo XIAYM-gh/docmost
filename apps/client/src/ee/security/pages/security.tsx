@@ -16,7 +16,9 @@ export default function Security() {
   return (
     <>
       <Helmet>
-        <title>Security - {getAppName()}</title>
+        <title>
+          {t("Security")} - {getAppName()}
+        </title>
       </Helmet>
 
       <SettingsTitle title={t("Security")} />
