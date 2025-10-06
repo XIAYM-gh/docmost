@@ -12,7 +12,7 @@ import {
 } from "@/features/editor/atoms/editor-atoms";
 import {
   updatePageData,
-  useUpdateTitlePageMutation,
+  useUpdatePageMutation,
 } from "@/features/page/queries/page-query";
 import { useDebouncedCallback, getHotkeyHandler } from "@mantine/hooks";
 import { useAtom } from "jotai";
@@ -44,16 +44,17 @@ export function TitleEditor({
   editable,
 }: TitleEditorProps) {
   const { t } = useTranslation();
-  const { mutateAsync: updateTitlePageMutationAsync } =
-    useUpdateTitlePageMutation();
+  const [currentUser] = useAtom(currentUserAtom);
+  const { mutateAsync: updatePageMutationAsync } = useUpdatePageMutation();
   const pageEditor = useAtomValue(pageEditorAtom);
   const [, setTitleEditor] = useAtom(titleEditorAtom);
   const emit = useQueryEmit();
   const navigate = useNavigate();
   const [activePageId, setActivePageId] = useState(pageId);
-  const [currentUser] = useAtom(currentUserAtom);
   const userPageEditMode =
     currentUser?.user?.settings?.preferences?.pageEditMode ?? PageEditMode.Edit;
+  const userSpellcheckPref =
+    currentUser?.user?.settings?.preferences?.spellcheck ?? true;
 
   const titleEditor = useEditor({
     extensions: [
@@ -118,7 +119,7 @@ export function TitleEditor({
       return;
     }
 
-    updateTitlePageMutationAsync({
+    updatePageMutationAsync({
       pageId: pageId,
       title: titleEditor.getText(),
     }).then((page) => {
@@ -212,6 +213,7 @@ export function TitleEditor({
         // Then handle other key events
         handleTitleKeyDown(event);
       }}
+      spellCheck={userSpellcheckPref}
     />
   );
 }

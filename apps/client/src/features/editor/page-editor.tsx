@@ -82,7 +82,7 @@ export default function PageEditor({
   const [isLocalSynced, setLocalSynced] = useState(false);
   const [isRemoteSynced, setRemoteSynced] = useState(false);
   const [yjsConnectionStatus, setYjsConnectionStatus] = useAtom(
-    yjsConnectionStatusAtom,
+    yjsConnectionStatusAtom
   );
   const menuContainerRef = useRef(null);
   const documentName = `page.${pageId}`;
@@ -101,6 +101,8 @@ export default function PageEditor({
     remote: HocuspocusProvider;
   } | null>(null);
   const [providersReady, setProvidersReady] = useState(false);
+  const userSpellcheckPref =
+    currentUser?.user?.settings?.preferences?.spellcheck ?? true;
 
   const localProvider = providersRef.current?.local;
   const remoteProvider = providersRef.current?.remote;
@@ -273,7 +275,7 @@ export default function PageEditor({
         debouncedUpdateContent(editorJson);
       },
     },
-    [pageId, editable, remoteProvider],
+    [pageId, editable, remoteProvider]
   );
 
   const editorIsEditable = useEditorState({
@@ -318,7 +320,7 @@ export default function PageEditor({
     return () => {
       document.removeEventListener(
         "ACTIVE_COMMENT_EVENT",
-        handleActiveCommentEvent,
+        handleActiveCommentEvent
       );
     };
   }, []);
@@ -395,7 +397,7 @@ export default function PageEditor({
   return (
     <div className="editor-container" style={{ position: "relative" }}>
       <div ref={menuContainerRef}>
-        <EditorContent editor={editor} />
+        <EditorContent editor={editor} spellCheck={userSpellcheckPref} />
 
         {editor && (
           <SearchAndReplaceDialog editor={editor} editable={editable} />
