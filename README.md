@@ -3,9 +3,9 @@
 A derivative of [Docmost](https://github.com/docmost/docmost), trying keeping it clean and simple.
 
 > [!WARNING]
-> This is a personal fork with learning and educational purpose, please consider buying a EE license to support the original authors.
+> This is a personal fork with learning and educational purpose, please consider buying an EE license to support the original authors.
 >
-> Updates are not guaranteed because I only have very limited time.
+> Also, frequent updates are not guaranteed because of very limited time.
 >
 > Bugs may arise, please report them through GitHub issues.
 
@@ -24,7 +24,7 @@ From upstream:
 - File attachments
 - Embeds (Airtable, Loom, Miro and more)
 
-Ours modifications:
+Our modifications:
 
 - Basic MFA feature (TOTP only)
 - Resolving comments
@@ -55,6 +55,9 @@ pnpm i
 pnpm build
 ```
 
+> [!NOTE]
+> Please re-install the dependencies every time after running `git pull` to avoid potential issues.
+
 After compiling the project, you need to configure the dotenv file, of which you can refer to [the official documentation](https://docmost.com/docs/self-hosting/environment-variables) for help.
 
 ```shell
@@ -77,6 +80,14 @@ pnpm nx run server:start
 pnpm nx run client:dev
 pnpm nx run server:start:dev
 ```
+
+> [!NOTE]
+> If you encounter problems running the dev server, please apply the migrations first using:  
+> `pnpm nx run server:migration:latest`
+
+> [!TIP]
+> People may find nodejs throwing errors when running within a proot container.  
+> If so, please start the server using `node launch-proot.js` instead.
 
 ## License
 
