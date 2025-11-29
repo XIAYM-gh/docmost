@@ -69,19 +69,14 @@ export function MfaSettings() {
 
         <ResponsiveSettingsControl>
           {!isMfaEnabled ? (
-            <Tooltip
-              label={t("Available in enterprise edition")}
-              disabled={canUseMfa}
+            <Button
+              disabled={!canUseMfa}
+              variant="default"
+              onClick={() => setSetupModalOpen(true)}
+              style={{ whiteSpace: "nowrap" }}
             >
-              <Button
-                disabled={!canUseMfa}
-                variant="default"
-                onClick={() => setSetupModalOpen(true)}
-                style={{ whiteSpace: "nowrap" }}
-              >
-                {t("Add 2FA method")}
-              </Button>
-            </Tooltip>
+              {t("Add 2FA method")}
+            </Button>
           ) : (
             <Group gap="sm" wrap="nowrap">
               <Button

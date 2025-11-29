@@ -123,19 +123,6 @@ export default function SettingsSidebar() {
   }, [location.pathname]);
 
   const canShowItem = (item: DataItem) => {
-    if (item.showDisabledInNonEE && item.isEnterprise) {
-      // Check admin permission regardless of license
-      return item.isAdmin ? isAdmin : true;
-    }
-
-    if (item.isCloud || item.isEnterprise) {
-      return item.isAdmin ? isAdmin : true;
-    }
-
-    if (item.isSelfhosted) {
-      return item.isAdmin ? isAdmin : true;
-    }
-
     if (item.isAdmin) {
       return isAdmin;
     }
@@ -143,12 +130,7 @@ export default function SettingsSidebar() {
     return true;
   };
 
-  const isItemDisabled = (item: DataItem) => {
-    if (item.showDisabledInNonEE && item.isEnterprise) {
-      return true;
-    }
-    return false;
-  };
+  const isItemDisabled = (_: any) => false;
 
   const menuItems = groupedData.map((group) => {
     if (group.heading === "System" && !isAdmin) {
