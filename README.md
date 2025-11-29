@@ -36,7 +36,7 @@ Our modifications:
 
 - NodeJS runtime
 - Valid `pnpm` installation
-- PostgreSQL server
+- PostgreSQL server (Permission Setup Required)
 - Redis/Valkey server
 
 ### Building & Running
@@ -56,7 +56,8 @@ pnpm build
 ```
 
 > [!NOTE]
-> Please re-install the dependencies every time after running `git pull` to avoid potential issues.
+> Please reinstall the dependencies every time after running `git pull` to avoid potential issues.  
+> If problems still exist after reinstalling, please remove every `node_modules` folder and retry.
 
 After compiling the project, you need to configure the dotenv file, of which you can refer to [the official documentation](https://docmost.com/docs/self-hosting/environment-variables) for help.
 
@@ -86,7 +87,7 @@ pnpm nx run server:start:dev
 > `pnpm nx run server:migration:latest`
 
 > [!TIP]
-> People may find nodejs throwing errors when running within a proot container.  
+> People may find NodeJS throwing errors when running within a proot container.  
 > If so, please start the server using `node launch-proot.js` instead.
 
 ## License

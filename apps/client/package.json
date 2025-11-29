@@ -17,6 +17,7 @@
     "@emoji-mart/react": "^1.1.1",
     "@excalidraw/excalidraw": "0.18.0-864353b",
     "@mantine/core": "^8.3.1",
+    "@mantine/dates": "^8.3.6",
     "@mantine/form": "^8.3.1",
     "@mantine/hooks": "^8.3.1",
     "@mantine/modals": "^8.3.1",

@@ -19,6 +19,8 @@ import useUserRole from "@/hooks/use-user-role.tsx";
 import { useAtom } from "jotai/index";
 import { workspaceAtom } from "@/features/user/atoms/current-user-atom.ts";
 import {
+  prefetchApiKeyManagement,
+  prefetchApiKeys,
   prefetchGroups,
   prefetchShares,
   prefetchSpaces,
@@ -55,6 +57,14 @@ const groupedData: DataGroup[] = [
         icon: IconBrush,
         path: "/settings/account/preferences",
       },
+      {
+        label: "API keys",
+        icon: IconKey,
+        path: "/settings/account/api-keys",
+        isCloud: true,
+        isEnterprise: true,
+        showDisabledInNonEE: true,
+      },
     ],
   },
   {
@@ -75,6 +85,15 @@ const groupedData: DataGroup[] = [
       { label: "Groups", icon: IconUsersGroup, path: "/settings/groups" },
       { label: "Spaces", icon: IconSpaces, path: "/settings/spaces" },
       { label: "Public sharing", icon: IconWorld, path: "/settings/sharing" },
+      {
+        label: "API management",
+        icon: IconKey,
+        path: "/settings/api-keys",
+        isCloud: true,
+        isEnterprise: true,
+        isAdmin: true,
+        showDisabledInNonEE: true,
+      },
     ],
   },
   {
@@ -159,6 +178,12 @@ export default function SettingsSidebar() {
               break;
             case "Public sharing":
               prefetchHandler = prefetchShares;
+              break;
+            case "API keys":
+              prefetchHandler = prefetchApiKeys;
+              break;
+            case "API management":
+              prefetchHandler = prefetchApiKeyManagement;
               break;
             default:
               break;
