@@ -12,7 +12,8 @@ export interface UseUnifiedSearchParams extends IPageSearchParams {
 }
 
 export function useUnifiedSearch(
-  params: UseUnifiedSearchParams
+  params: UseUnifiedSearchParams,
+  enabled: boolean = true
 ): UseQueryResult<UnifiedSearchResult[], Error> {
   const searchType = "page";
 
@@ -23,6 +24,6 @@ export function useUnifiedSearch(
       const { contentType, ...backendParams } = params;
       return await searchPage(backendParams);
     },
-    enabled: !!params.query,
+    enabled: !!params.query && enabled,
   });
 }

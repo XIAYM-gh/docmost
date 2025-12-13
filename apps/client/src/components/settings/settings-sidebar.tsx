@@ -16,7 +16,7 @@ import { Link, useLocation } from "react-router-dom";
 import classes from "./settings.module.css";
 import { useTranslation } from "react-i18next";
 import useUserRole from "@/hooks/use-user-role.tsx";
-import { useAtom } from "jotai/index";
+import { useAtom } from "jotai";
 import { workspaceAtom } from "@/features/user/atoms/current-user-atom.ts";
 import {
   prefetchApiKeyManagement,
@@ -35,11 +35,8 @@ interface DataItem {
   label: string;
   icon: React.ElementType;
   path: string;
-  isCloud?: boolean;
-  isEnterprise?: boolean;
   isAdmin?: boolean;
-  isSelfhosted?: boolean;
-  showDisabledInNonEE?: boolean;
+  isDisabled?: boolean;
 }
 
 interface DataGroup {
@@ -61,9 +58,7 @@ const groupedData: DataGroup[] = [
         label: "API keys",
         icon: IconKey,
         path: "/settings/account/api-keys",
-        isCloud: true,
-        isEnterprise: true,
-        showDisabledInNonEE: true,
+        isDisabled: true,
       },
     ],
   },
@@ -89,10 +84,8 @@ const groupedData: DataGroup[] = [
         label: "API management",
         icon: IconKey,
         path: "/settings/api-keys",
-        isCloud: true,
-        isEnterprise: true,
         isAdmin: true,
-        showDisabledInNonEE: true,
+        isDisabled: true,
       },
     ],
   },
@@ -130,7 +123,7 @@ export default function SettingsSidebar() {
     return true;
   };
 
-  const isItemDisabled = (_: any) => false;
+  const isItemDisabled = (item: DataItem) => item.isDisabled;
 
   const menuItems = groupedData.map((group) => {
     if (group.heading === "System" && !isAdmin) {
@@ -203,7 +196,7 @@ export default function SettingsSidebar() {
             return (
               <Tooltip
                 key={item.label}
-                label={t("Available in enterprise edition")}
+                label={t("Not implemented yet")}
                 position="right"
                 withArrow
               >

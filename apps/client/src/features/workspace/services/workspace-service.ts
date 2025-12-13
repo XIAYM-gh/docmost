@@ -103,4 +103,3 @@ export async function getAppVersion(): Promise<IVersion> {
   const req = await api.post("/version");
   return req.data;
 }
-

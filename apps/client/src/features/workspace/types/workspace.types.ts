@@ -7,7 +7,6 @@ export interface IWorkspace {
   defaultSpaceId: string;
   customDomain: string;
   enableInvite: boolean;
-  settings: any;
   status: string;
   enforceSso: boolean;
   stripeCustomerId: string;

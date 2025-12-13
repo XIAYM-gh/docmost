@@ -1,5 +1,6 @@
 import { Spotlight } from "@mantine/spotlight";
 import { IconSearch } from "@tabler/icons-react";
+import { Group } from "@mantine/core";
 import { useState, useMemo } from "react";
 import { useDebouncedValue } from "@mantine/hooks";
 import { useTranslation } from "react-i18next";
@@ -68,10 +69,18 @@ export function SearchSpotlight({ spaceId }: SearchSpotlightProps) {
           backgroundOpacity: 0.55,
         }}
       >
-        <Spotlight.Search
-          placeholder={t("Search...")}
-          leftSection={<IconSearch size={20} stroke={1.5} />}
-        />
+        <Group gap="xs" px="sm" pt="sm" pb="xs">
+          <Spotlight.Search
+            placeholder={t("Search...")}
+            leftSection={<IconSearch size={20} stroke={1.5} />}
+            style={{ flex: 1 }}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" && query.trim()) {
+                e.preventDefault();
+              }
+            }}
+          />
+        </Group>
 
         <div
           style={{

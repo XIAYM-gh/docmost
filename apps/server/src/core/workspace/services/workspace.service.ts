@@ -44,7 +44,6 @@ export class WorkspaceService {
     private domainService: DomainService,
     @InjectKysely() private readonly db: KyselyDB,
     @InjectQueue(QueueName.ATTACHMENT_QUEUE) private attachmentQueue: Queue,
-    @InjectQueue(QueueName.BILLING_QUEUE) private billingQueue: Queue,
   ) {}
 
   async findById(workspaceId: string) {

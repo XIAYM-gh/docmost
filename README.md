@@ -29,6 +29,9 @@ Our modifications:
 - Basic MFA feature (TOTP only)
 - Resolving comments
 - Clean up useless cloud modules and enterprise edition features, including telemetry
+- We don't need AI
+
+> API Keys feature is working in progress.
 
 ## Getting Started
 
@@ -78,6 +81,7 @@ pnpm run server:start
 pnpm nx run server:start
 
 # Additionally, you can run it in watch mode
+pnpm nx run @docmost/editor-ext:build
 pnpm nx run client:dev
 pnpm nx run server:start:dev
 ```
