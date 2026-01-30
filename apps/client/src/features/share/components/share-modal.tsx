@@ -20,6 +20,7 @@ import {
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { extractPageSlugId, getPageIcon } from "@/lib";
 import { useTranslation } from "react-i18next";
+import { usePageQuery } from "@/features/page/queries/page-query.ts";
 import CopyTextButton from "@/components/common/copy.tsx";
 import { getAppUrl } from "@/lib/config.ts";
 import { buildPageUrl } from "@/features/page/page.utils.ts";
@@ -32,7 +33,9 @@ export default function ShareModal({ readOnly }: ShareModalProps) {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { pageSlug } = useParams();
-  const pageId = extractPageSlugId(pageSlug);
+  const pageSlugId = extractPageSlugId(pageSlug);
+  const { data: page } = usePageQuery({ pageId: pageSlugId });
+  const pageId = page?.id;
   const { data: share } = useShareForPageQuery(pageId);
   const { spaceSlug } = useParams();
   const createShareMutation = useCreateShareMutation();
@@ -73,7 +76,7 @@ export default function ShareModal({ readOnly }: ShareModalProps) {
   };
 
   const handleSubPagesChange = async (
-    event: React.ChangeEvent<HTMLInputElement>
+    event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     const value = event.currentTarget.checked;
     updateShareMutation.mutateAsync({
@@ -83,7 +86,7 @@ export default function ShareModal({ readOnly }: ShareModalProps) {
   };
 
   const handleIndexSearchChange = async (
-    event: React.ChangeEvent<HTMLInputElement>
+    event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     const value = event.currentTarget.checked;
     updateShareMutation.mutateAsync({
@@ -113,7 +116,7 @@ export default function ShareModal({ readOnly }: ShareModalProps) {
         </ActionIcon>
       </Group>
     ),
-    [publicLink]
+    [publicLink],
   );
 
   return (
@@ -152,7 +155,7 @@ export default function ShareModal({ readOnly }: ShareModalProps) {
               to={buildPageUrl(
                 spaceSlug,
                 share.sharedPage.slugId,
-                share.sharedPage.title
+                share.sharedPage.title,
               )}
             >
               <Group gap="4" wrap="nowrap" my="sm">

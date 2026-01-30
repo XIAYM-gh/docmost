@@ -16,9 +16,11 @@ import { ExportModule } from './integrations/export/export.module';
 import { ImportModule } from './integrations/import/import.module';
 import { SecurityModule } from './integrations/security/security.module';
 import { MFAModule } from './core/mfa-community/mfa.module';
+import { LoggerModule } from './common/logger/logger.module';
 
 @Module({
   imports: [
+    LoggerModule,
     CoreModule,
     DatabaseModule,
     EnvironmentModule,

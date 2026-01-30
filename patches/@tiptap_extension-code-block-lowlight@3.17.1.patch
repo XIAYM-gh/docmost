@@ -1,0 +1,13 @@
+diff --git a/dist/index.cjs b/dist/index.cjs
+index 9924615f750bbbcaff486aa3f01ceabdae704aef..30e9ccefbb60781aff2145727dd447143dcb6a37 100644
+--- a/dist/index.cjs
++++ b/dist/index.cjs
+@@ -151,7 +151,7 @@ function LowlightPlugin({
+ }
+ 
+ // src/code-block-lowlight.ts
+-var CodeBlockLowlight = import_extension_code_block.default.extend({
++var CodeBlockLowlight = import_extension_code_block.CodeBlock.extend({
+   addOptions() {
+     var _a;
+     return {
