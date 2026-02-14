@@ -55,10 +55,10 @@ api.interceptors.response.use(
       }
     }
     return Promise.reject(error);
-  }
+  },
 );
 
-function redirectToLogin() {
+export function redirectToLogin() {
   const exemptPaths = [
     APP_ROUTE.AUTH.LOGIN,
     APP_ROUTE.AUTH.SIGNUP,

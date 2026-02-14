@@ -1,16 +1,12 @@
-import api from "@/lib/api-client";
+import api, { redirectToLogin } from "@/lib/api-client";
 import { ICurrentUser, IUser } from "@/features/user/types/user.types";
-import APP_ROUTE from "@/lib/app-route";
 
 export async function getMyInfo(): Promise<ICurrentUser> {
   try {
     const req = await api.post<ICurrentUser>("/users/me");
     return req.data as ICurrentUser;
   } catch (error) {
-    if (window.location.pathname != APP_ROUTE.AUTH.LOGIN) {
-      window.location.replace(APP_ROUTE.AUTH.LOGIN);
-    }
-
+    redirectToLogin();
     throw error;
   }
 }
