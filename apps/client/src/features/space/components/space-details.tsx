@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useSpaceQuery } from "@/features/space/queries/space-query.ts";
 import { EditSpaceForm } from "@/features/space/components/edit-space-form.tsx";
 import { Button, Divider, Text } from "@mantine/core";
@@ -77,7 +77,6 @@ export default function SpaceDetails({ spaceId, readOnly }: SpaceDetailsProps) {
               fallbackName={space.name}
               size={"60px"}
               variant="filled"
-
               type={AvatarIconType.SPACE_ICON}
               onUpload={handleIconUpload}
               onRemove={handleIconRemove}

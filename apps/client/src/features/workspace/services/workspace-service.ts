@@ -23,7 +23,7 @@ export async function getWorkspacePublicData(): Promise<IPublicWorkspace> {
 }
 
 export async function getWorkspaceMembers(
-  params?: QueryParams
+  params?: QueryParams,
 ): Promise<IPagination<IUser>> {
   const req = await api.post("/workspace/members", params);
   return req.data;
@@ -48,7 +48,7 @@ export async function changeMemberRole(data: {
 }
 
 export async function getPendingInvitations(
-  params?: QueryParams
+  params?: QueryParams,
 ): Promise<IPagination<IInvitation>> {
   const req = await api.post("/workspace/invites", params);
   return req.data;
@@ -60,7 +60,7 @@ export async function createInvitation(data: ICreateInvite) {
 }
 
 export async function acceptInvitation(
-  data: IAcceptInvite
+  data: IAcceptInvite,
 ): Promise<{ requiresLogin?: boolean }> {
   const req = await api.post("/workspace/invites/accept", data);
   return req.data;
@@ -93,7 +93,7 @@ export async function getInvitationById(data: {
 }
 
 export async function createWorkspace(
-  data: ISetupWorkspace
+  data: ISetupWorkspace,
 ): Promise<{ workspace: IWorkspace } & { exchangeToken: string }> {
   const req = await api.post("/workspace/create", data);
   return req.data;

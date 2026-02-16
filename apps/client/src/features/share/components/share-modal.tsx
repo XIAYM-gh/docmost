@@ -9,7 +9,7 @@ import {
   Text,
   TextInput,
 } from "@mantine/core";
-import { IconExternalLink, IconWorld, IconLock } from "@tabler/icons-react";
+import { IconExternalLink, IconWorld } from "@tabler/icons-react";
 import React, { useEffect, useMemo, useState } from "react";
 import {
   useCreateShareMutation,
@@ -123,7 +123,6 @@ export default function ShareModal({ readOnly }: ShareModalProps) {
     <Popover width={350} position="bottom" withArrow shadow="md">
       <Popover.Target>
         <Button
-          style={{ border: "none" }}
           size="compact-sm"
           leftSection={
             <Indicator
@@ -135,7 +134,8 @@ export default function ShareModal({ readOnly }: ShareModalProps) {
               <IconWorld size={20} stroke={1.5} />
             </Indicator>
           }
-          variant="default"
+          color="dark"
+          variant="subtle"
         >
           {t("Share")}
         </Button>

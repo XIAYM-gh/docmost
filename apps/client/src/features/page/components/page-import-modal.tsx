@@ -109,7 +109,7 @@ function ImportFormatSelection({ spaceId, onClose }: ImportFormatSelection) {
         id: "import",
         title: t("Importing pages"),
         message: t(
-          "Page import is in progress. You can check back later if this takes longer."
+          "Page import is in progress. You can check back later if this takes longer.",
         ),
         loading: true,
         withCloseButton: true,
@@ -186,7 +186,7 @@ function ImportFormatSelection({ spaceId, onClose }: ImportFormatSelection) {
               "Something went wrong while importing pages: {{reason}}.",
               {
                 reason: fileTask.errorMessage,
-              }
+              },
             ),
             icon: <IconX size={18} />,
             loading: false,
@@ -206,7 +206,7 @@ function ImportFormatSelection({ spaceId, onClose }: ImportFormatSelection) {
             "Something went wrong while importing pages: {{reason}}.",
             {
               reason: err.response?.data.message,
-            }
+            },
           ),
           icon: <IconX size={18} />,
           loading: false,
@@ -352,7 +352,7 @@ function ImportFormatSelection({ spaceId, onClose }: ImportFormatSelection) {
               `Upload zip file containing Markdown and HTML files. Max: {{sizeLimit}}`,
               {
                 sizeLimit: formatBytes(getFileImportSizeLimit()),
-              }
+              },
             )}
           </Text>
           <FileButton

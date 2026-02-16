@@ -2,7 +2,7 @@ import { MultipartFile } from '@fastify/multipart';
 import * as path from 'path';
 import { AttachmentType } from './attachment.constants';
 import { sanitizeFileName } from '../../common/helpers';
-import * as sharp from 'sharp';
+import sharp from 'sharp';
 
 export interface PreparedFile {
   buffer?: Buffer;

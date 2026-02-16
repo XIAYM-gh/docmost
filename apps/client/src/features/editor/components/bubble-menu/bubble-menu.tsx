@@ -9,10 +9,11 @@ import {
   IconStrikethrough,
   IconUnderline,
   IconMessage,
+  IconSparkles,
 } from "@tabler/icons-react";
 import clsx from "clsx";
 import classes from "./bubble-menu.module.css";
-import { ActionIcon, rem, Tooltip } from "@mantine/core";
+import { ActionIcon, Button, rem, Tooltip } from "@mantine/core";
 import { ColorSelector } from "./color-selector";
 import { NodeSelector } from "./node-selector";
 import { TextAlignmentSelector } from "./text-alignment-selector";
@@ -20,11 +21,12 @@ import {
   draftCommentIdAtom,
   showCommentPopupAtom,
 } from "@/features/comment/atoms/comment-atom";
-import { useAtom } from "jotai";
+import { useAtom, useAtomValue } from "jotai";
 import { v7 as uuid7 } from "uuid";
 import { isCellSelection, isTextSelected } from "@docmost/editor-ext";
 import { LinkSelector } from "@/features/editor/components/bubble-menu/link-selector.tsx";
 import { useTranslation } from "react-i18next";
+import { workspaceAtom } from "@/features/user/atoms/current-user-atom";
 
 export interface BubbleMenuItem {
   name: string;
@@ -147,7 +149,10 @@ export const EditorBubbleMenu: FC<EditorBubbleMenuProps> = (props) => {
   const [isColorSelectorOpen, setIsColorSelectorOpen] = useState(false);
 
   return (
-    <BubbleMenu {...bubbleMenuProps} style={{ zIndex: 200, position: "relative"}}>
+    <BubbleMenu
+      {...bubbleMenuProps}
+      style={{ zIndex: 200, position: "relative" }}
+    >
       <div className={classes.bubbleMenu}>
         <NodeSelector
           editor={props.editor}
@@ -215,7 +220,7 @@ export const EditorBubbleMenu: FC<EditorBubbleMenuProps> = (props) => {
         <ActionIcon
           variant="default"
           size="lg"
-          radius="0"
+          radius="6px"
           aria-label={t(commentItem.name)}
           style={{ border: "none" }}
           onClick={commentItem.command}

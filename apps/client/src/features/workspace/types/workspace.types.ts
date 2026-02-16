@@ -19,6 +19,15 @@ export interface IWorkspace {
   plan?: string;
   hasLicenseKey?: boolean;
   enforceMfa?: boolean;
+  disablePublicSharing?: boolean;
+}
+
+export interface IWorkspaceSettings {
+  sharing?: IWorkspaceSharingSettings;
+}
+
+export interface IWorkspaceSharingSettings {
+  disabled?: boolean;
 }
 
 export interface ICreateInvite {

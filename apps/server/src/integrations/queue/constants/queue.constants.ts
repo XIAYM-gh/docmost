@@ -5,6 +5,8 @@ export enum QueueName {
   BILLING_QUEUE = '{billing-queue}',
   FILE_TASK_QUEUE = '{file-task-queue}',
   SEARCH_QUEUE = '{search-queue}',
+  HISTORY_QUEUE = '{history-queue}',
+  NOTIFICATION_QUEUE = '{notification-queue}',
 }
 
 export enum QueueJob {
@@ -17,6 +19,7 @@ export enum QueueJob {
   DELETE_USER_AVATARS = 'delete-user-avatars',
 
   PAGE_BACKLINKS = 'page-backlinks',
+  ADD_PAGE_WATCHERS = 'add-page-watchers',
 
   STRIPE_SEATS_SYNC = 'sync-stripe-seats',
   TRIAL_ENDED = 'trial-ended',
@@ -56,4 +59,10 @@ export enum QueueJob {
 
   GENERATE_PAGE_EMBEDDINGS = 'generate-page-embeddings',
   DELETE_PAGE_EMBEDDINGS = 'delete-page-embeddings',
+
+  PAGE_HISTORY = 'page-history',
+
+  COMMENT_NOTIFICATION = 'comment-notification',
+  COMMENT_RESOLVED_NOTIFICATION = 'comment-resolved-notification',
+  PAGE_MENTION_NOTIFICATION = 'page-mention-notification',
 }

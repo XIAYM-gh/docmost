@@ -124,28 +124,7 @@ export class CommentController {
       );
     }
 
-    return this.commentService.update(comment, dto);
-  }
-
-  @HttpCode(HttpStatus.OK)
-  @Post('resolve')
-  async resolve(@Body() input: ResolveCommentDto, @AuthUser() user: User) {
-    const comment = await this.commentRepo.findById(input.commentId);
-    if (!comment) {
-      throw new NotFoundException('Comment not found');
-    }
-
-    const ability = await this.spaceAbility.createForUser(
-      user,
-      comment.spaceId,
-    );
-
-    // must be a space member with edit permission
-    if (ability.cannot(SpaceCaslAction.Edit, SpaceCaslSubject.Page)) {
-      throw new ForbiddenException();
-    }
-
-    return this.commentService.resolve(comment, input.resolved, user);
+    return this.commentService.update(comment, dto, user);
   }
 
   @HttpCode(HttpStatus.OK)

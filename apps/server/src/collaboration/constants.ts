@@ -1,0 +1,1 @@
+export const HISTORY_FAST_INTERVAL = 20 * 1000;

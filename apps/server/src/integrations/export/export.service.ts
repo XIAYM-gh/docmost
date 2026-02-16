@@ -9,7 +9,7 @@ import { ExportFormat } from './dto/export-dto';
 import { Page } from '@docmost/db/types/entity.types';
 import { InjectKysely } from 'nestjs-kysely';
 import { KyselyDB } from '@docmost/db/types/kysely.types';
-import * as JSZip from 'jszip';
+import JSZip from 'jszip';
 import { StorageService } from '../storage/storage.service';
 import {
   buildTree,
@@ -113,7 +113,7 @@ export class ExportService {
       const page = await this.pageRepo.findById(pageId, {
         includeContent: true,
       });
-      if (page){
+      if (page) {
         pages = [page];
       }
     }

@@ -167,7 +167,7 @@ export class WorkspaceRepo {
       .updateTable('workspaces')
       .set({
         settings: sql`COALESCE(settings, '{}'::jsonb)
-                || jsonb_build_object('api', COALESCE(settings->'api', '{}'::jsonb) 
+                || jsonb_build_object('api', COALESCE(settings->'api', '{}'::jsonb)
                 || jsonb_build_object('${sql.raw(prefKey)}', ${sql.lit(prefValue)}))`,
         updatedAt: new Date(),
       })

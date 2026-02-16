@@ -22,7 +22,7 @@ import { useTranslation } from "react-i18next";
 import { useDebouncedValue } from "@mantine/hooks";
 import { useGetSpacesQuery } from "@/features/space/queries/space-query";
 import classes from "./search-spotlight-filters.module.css";
-import { useAtom } from "jotai/index";
+import { useAtom } from "jotai";
 import { workspaceAtom } from "@/features/user/atoms/current-user-atom.ts";
 
 interface SearchSpotlightFiltersProps {
@@ -36,7 +36,7 @@ export function SearchSpotlightFilters({
 }: SearchSpotlightFiltersProps) {
   const { t } = useTranslation();
   const [selectedSpaceId, setSelectedSpaceId] = useState<string | null>(
-    spaceId || null
+    spaceId || null,
   );
   const [spaceSearchQuery, setSpaceSearchQuery] = useState("");
   const [debouncedSpaceQuery] = useDebouncedValue(spaceSearchQuery, 300);
@@ -44,7 +44,6 @@ export function SearchSpotlightFilters({
   const [workspace] = useAtom(workspaceAtom);
 
   const { data: spacesData } = useGetSpacesQuery({
-    page: 1,
     limit: 100,
     query: debouncedSpaceQuery,
   });

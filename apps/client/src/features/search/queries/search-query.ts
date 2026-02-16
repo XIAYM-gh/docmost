@@ -12,7 +12,7 @@ import {
 } from "@/features/search/types/search.types";
 
 export function usePageSearchQuery(
-  params: IPageSearchParams
+  params: IPageSearchParams,
 ): UseQueryResult<IPageSearch[], Error> {
   return useQuery({
     queryKey: ["page-search", params],
@@ -22,18 +22,19 @@ export function usePageSearchQuery(
 }
 
 export function useSearchSuggestionsQuery(
-  params: SearchSuggestionParams
+  params: SearchSuggestionParams & { preload?: boolean },
 ): UseQueryResult<ISuggestionResult, Error> {
+  const { preload, ...queryParams } = params;
   return useQuery({
     queryKey: ["search-suggestion", params.query],
     staleTime: 60 * 1000, // 1min
-    queryFn: () => searchSuggestions(params),
-    enabled: !!params.query,
+    queryFn: () => searchSuggestions(queryParams),
+    enabled: preload || !!params.query,
   });
 }
 
 export function useShareSearchQuery(
-  params: IPageSearchParams
+  params: IPageSearchParams,
 ): UseQueryResult<IPageSearch[], Error> {
   return useQuery({
     queryKey: ["share-search", params],

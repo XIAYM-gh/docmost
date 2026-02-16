@@ -7,22 +7,25 @@ import {
 } from "@/features/search/types/search.types";
 
 export async function searchPage(
-  params: IPageSearchParams
+  params: IPageSearchParams,
 ): Promise<IPageSearch[]> {
-  const req = await api.post<IPageSearch[]>("/search", params);
-  return req.data;
+  const req = await api.post<{ items: IPageSearch[] }>("/search", params);
+  return req.data.items;
 }
 
 export async function searchSuggestions(
-  params: SearchSuggestionParams
+  params: SearchSuggestionParams,
 ): Promise<ISuggestionResult> {
   const req = await api.post<ISuggestionResult>("/search/suggest", params);
   return req.data;
 }
 
 export async function searchShare(
-  params: IPageSearchParams
+  params: IPageSearchParams,
 ): Promise<IPageSearch[]> {
-  const req = await api.post<IPageSearch[]>("/search/share-search", params);
-  return req.data;
+  const req = await api.post<{ items: IPageSearch[] }>(
+    "/search/share-search",
+    params,
+  );
+  return req.data.items;
 }
