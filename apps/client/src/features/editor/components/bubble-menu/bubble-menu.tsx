@@ -217,16 +217,18 @@ export const EditorBubbleMenu: FC<EditorBubbleMenuProps> = (props) => {
           }}
         />
 
-        <ActionIcon
-          variant="default"
-          size="lg"
-          radius="6px"
-          aria-label={t(commentItem.name)}
-          style={{ border: "none" }}
-          onClick={commentItem.command}
-        >
-          <IconMessage size={16} stroke={2} />
-        </ActionIcon>
+        <Tooltip label={t(commentItem.name)} withArrow withinPortal={false}>
+          <ActionIcon
+            variant="default"
+            size="lg"
+            radius="6px"
+            aria-label={t(commentItem.name)}
+            style={{ border: "none" }}
+            onClick={commentItem.command}
+          >
+            <IconMessage size={16} stroke={2} />
+          </ActionIcon>
+        </Tooltip>
       </div>
     </BubbleMenu>
   );
